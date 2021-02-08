@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Shoppable</string>
+    <string name="action_reset">Reset</string>
+    <string name="list_screen_title">Products</string>
+    <string name="product_screen_title">Product</string>
+    <!-- Strings used for fragments for navigation -->
+
+</resources>

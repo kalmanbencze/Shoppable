@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/ListFragment">
+
+    <fragment
+        android:id="@+id/ListFragment"
+        android:name="com.ikea.shoppable.ListFragment"
+        android:label="@string/list_screen_title"
+        tools:layout="@layout/fragment_list">
+
+        <action
+            android:id="@+id/action_open_product"
+            app:destination="@id/ProductFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ProductFragment"
+        android:name="com.ikea.shoppable.ProductFragment"
+        android:label="@string/product_screen_title"
+        tools:layout="@layout/fragment_second">
+    </fragment>
+</navigation>

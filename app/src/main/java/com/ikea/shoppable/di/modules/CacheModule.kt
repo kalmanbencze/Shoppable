@@ -1,8 +1,8 @@
 package com.ikea.shoppable.di.modules
 
 import android.content.Context
-import com.ikea.shoppable.persistence.ProductCache
-import com.ikea.shoppable.persistence.ProductCacheImplementation
+import com.ikea.shoppable.persistence.ProductRepository
+import com.ikea.shoppable.persistence.ProductRepositoryImpl
 import com.ikea.shoppable.persistence.db.CacheDatabase
 import com.ikea.shoppable.persistence.db.ProductDao
 import dagger.Module
@@ -14,8 +14,8 @@ import javax.inject.Singleton
 class CacheModule {
     @Provides
     @Singleton
-    fun providesProductCache(productDao: ProductDao): ProductCache {
-        return ProductCacheImplementation(productDao)
+    fun providesProductCache(productDao: ProductDao): ProductRepository {
+        return ProductRepositoryImpl(productDao)
     }
 
     @Provides

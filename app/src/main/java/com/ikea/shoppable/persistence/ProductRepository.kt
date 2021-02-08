@@ -4,9 +4,9 @@ import com.ikea.shoppable.model.Product
 import io.reactivex.Completable
 import io.reactivex.Observable
 
-interface ProductCache {
+interface ProductRepository {
     fun getProducts(): Observable<List<Product>>
     fun getProductCount(): Observable<Int>
-    fun cacheProducts(categories: List<Product>): Completable
-    fun clearCache()
+    fun cacheProducts(products: List<Product>): Completable
+    fun clearCache(): Completable
 }

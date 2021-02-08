@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true">
+        <layer-list>
+            <item>
+                <shape android:shape="oval" android:tint="@color/price_green_pressed" />
+            </item>
+            <item android:bottom="8dp" android:drawable="@drawable/plus_sign" android:left="8dp" android:right="8dp" android:top="8dp">
+                <rotate android:fromDegrees="0" android:pivotX="50%" android:pivotY="50%" android:toDegrees="30" />
+            </item>
+        </layer-list>
+    </item>
+    <item android:state_selected="false">
+        <layer-list>
+            <item>
+                <shape android:shape="oval" android:tint="@color/price_green" />
+            </item>
+            <item android:bottom="8dp" android:drawable="@drawable/plus_sign" android:left="8dp" android:right="8dp" android:top="8dp">
+                <rotate android:fromDegrees="0" android:pivotX="50%" android:pivotY="50%" android:toDegrees="30" />
+            </item>
+        </layer-list>
+    </item>
+</selector>

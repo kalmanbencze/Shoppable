@@ -1,7 +1,8 @@
 package com.ikea.shoppable.di.modules
 
-import com.ikea.shoppable.ListFragment
-import com.ikea.shoppable.ProductFragment
+import com.ikea.shoppable.view.cart.CartFragment
+import com.ikea.shoppable.view.list.ListFragment
+import com.ikea.shoppable.view.details.ProductFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -13,6 +14,10 @@ import dagger.android.ContributesAndroidInjector
 abstract class FragmentBindingModule {
     @ContributesAndroidInjector
     abstract fun contributeForProductsList(): ListFragment
+
     @ContributesAndroidInjector
     abstract fun contributeForProductPage(): ProductFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeForCart(): CartFragment
 }

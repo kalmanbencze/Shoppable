@@ -10,4 +10,9 @@ class Price(
     val value: Double,
     @ColumnInfo(name = "currency")
     val currency: String
-)
+) {
+    override fun toString(): String {
+
+        return "$value $currency"
+    }
+}

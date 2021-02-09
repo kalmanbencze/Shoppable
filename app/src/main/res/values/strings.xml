@@ -4,6 +4,8 @@
     <string name="list_screen_title">Products</string>
     <string name="cart_screen_title">Cart</string>
     <string name="product_screen_title">Product</string>
+    <string name="label_add_successful">Product has been added to the cart!</string>
+    <string name="action_undo">Undo</string>
     <!-- Strings used for fragments for navigation -->
 
 </resources>

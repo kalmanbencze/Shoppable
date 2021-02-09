@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.ikea.shoppable.model.CartItem
 import com.ikea.shoppable.model.Product
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -14,11 +15,12 @@ import java.util.concurrent.TimeUnit
 /**
  * The Room database that contains the Users table
  */
-@Database(entities = [Product::class], version = 3)
+@Database(entities = [Product::class, CartItem::class], version = 6)
 @TypeConverters(value = [Converters::class])
 abstract class CacheDatabase : RoomDatabase() {
 
     abstract fun productDao(): ProductDao
+    abstract fun cartDao(): CartDao
 
     companion object {
 
@@ -32,23 +34,34 @@ abstract class CacheDatabase : RoomDatabase() {
             }
 
         private fun buildDatabase(context: Context) =
-            Room.databaseBuilder(context.applicationContext,
-                CacheDatabase::class.java, "product-cache.db")
+            Room.databaseBuilder(
+                context.applicationContext,
+                CacheDatabase::class.java, "product-cache.db"
+            )
                 .fallbackToDestructiveMigrationOnDowngrade()
                 .fallbackToDestructiveMigration()
                 .addCallback(object : Callback() {
-                    override fun onOpen(db: SupportSQLiteDatabase) {
-                        super.onOpen(db)
-                        Schedulers.io().scheduleDirect({
-                            val path = "products.json"
-                            val products = DBInputParser.readProducts(context, path)
-                            //we use blocking await for these completables since we run this on the io scheduler
-                            getInstance(context).productDao().deleteAll().blockingAwait()
-                            getInstance(context).productDao().insert(products.toList()).blockingAwait()
-                        }, 300, TimeUnit.MILLISECONDS)
+                    override fun onCreate(db: SupportSQLiteDatabase) {
+                        super.onCreate(db)
+                        insertDataAsync(context)
+                    }
+
+                    override fun onDestructiveMigration(db: SupportSQLiteDatabase) {
+                        super.onDestructiveMigration(db)
+                        insertDataAsync(context)
                     }
                 })
                 .build()
+
+        private fun insertDataAsync(context: Context) {
+            Schedulers.io().scheduleDirect({
+                val path = "products.json"
+                val products = DBInputParser.readProducts(context, path)
+                //we use blocking await for these completables since we run this on the io scheduler
+                getInstance(context).productDao().deleteAll().blockingAwait()
+                getInstance(context).productDao().insert(products.toList()).blockingAwait()
+            }, 300, TimeUnit.MILLISECONDS)
+        }
 
     }
 }

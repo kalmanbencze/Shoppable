@@ -5,14 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ikea.shoppable.R
-import com.ikea.shoppable.model.Product
-import com.ikea.shoppable.persistence.ProductRepository
-import com.ikea.shoppable.view.common.ProductsListAdapter
-import com.ikea.shoppable.view.details.ProductFragment
+import com.ikea.shoppable.model.CartItemProduct
+import com.ikea.shoppable.persistence.CartRepository
 import dagger.android.support.DaggerFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -27,7 +24,7 @@ class CartFragment : DaggerFragment() {
     private lateinit var productList: RecyclerView
 
     @Inject
-    lateinit var repository: ProductRepository
+    lateinit var cart: CartRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,24 +36,29 @@ class CartFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        productList = view as RecyclerView
-//        productList.layoutManager = LinearLayoutManager(context)
-//        val adapter = ProductsListAdapter(object : ProductsListAdapter.OnItemClickListener {
-//            override fun onItemClicked(item: Product) {
-//
-//                val args = Bundle()
-//                args.putString(ProductFragment.KEY_ID, item.id)
-//                findNavController().navigate(R.id.action_open_product, args)
-//            }
-//
-//        })
-//        productList.adapter = adapter
-//
-//        compositeDisposable.add(repository.getProducts().observeOn(AndroidSchedulers.mainThread()).subscribe({
-//            adapter.items = it
-//        }, {
-//            Log.e(javaClass.simpleName, "onViewCreated: ", it)
-//        }))
+        productList = view as RecyclerView
+        productList.layoutManager = LinearLayoutManager(context)
+        val adapter = CartAdapter(object : CartAdapter.OnRemoveClickListener {
+            override fun onItemClicked(item: CartItemProduct) {
+                compositeDisposable.add(
+                    cart.removeFromCart(item.product.id)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            Log.d(javaClass.simpleName, "onItemClicked: removed element from cart")
+                        }, {
+                            Log.e(javaClass.simpleName, "onItemClicked: ", it)
+                        })
+                )
+            }
+
+        })
+        productList.adapter = adapter
+
+        compositeDisposable.add(cart.getItems().observeOn(AndroidSchedulers.mainThread()).subscribe({
+            adapter.items = it
+        }, {
+            Log.e(javaClass.simpleName, "onViewCreated: ", it)
+        }))
     }
 
     override fun onStop() {

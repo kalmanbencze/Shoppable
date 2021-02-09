@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 3,
-    "identityHash": "53b99bb98205fc4203ccb93f3385cd2e",
+    "version": 5,
+    "identityHash": "01ad10183bc1f94186239c6415bc207a",
     "entities": [
       {
         "tableName": "Products",
@@ -74,14 +74,8 @@
       },
       {
         "tableName": "Cart",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `productId` TEXT NOT NULL, `count` INTEGER NOT NULL, FOREIGN KEY(`productId`) REFERENCES `Products`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`productId` TEXT NOT NULL, `count` INTEGER NOT NULL, `date` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`productId`) REFERENCES `Products`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
           {
             "fieldPath": "productId",
             "columnName": "productId",
@@ -91,6 +85,18 @@
           {
             "fieldPath": "count",
             "columnName": "count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -120,7 +126,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '53b99bb98205fc4203ccb93f3385cd2e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '01ad10183bc1f94186239c6415bc207a')"
     ]
   }
 }

@@ -9,18 +9,22 @@ import io.reactivex.schedulers.Schedulers
 
 class ProductRepositoryImpl(val productDao: ProductDao) : ProductRepository {
     override fun getProducts(): Observable<List<Product>> {
-        return productDao.getAll().subscribeOn(Schedulers.io())
+        return productDao.getAll()
+            .subscribeOn(Schedulers.io())
     }
 
     override fun getProductCount(): Observable<Int> {
-        return productDao.getSize().subscribeOn(Schedulers.io())
+        return productDao.getSize()
+            .subscribeOn(Schedulers.io())
     }
 
     override fun cacheProducts(products: List<Product>): Completable {
-        return productDao.insert(products).subscribeOn(Schedulers.io())
+        return productDao.insert(products)
+            .subscribeOn(Schedulers.io())
     }
 
     override fun clearCache(): Completable {
-        return productDao.deleteAll().subscribeOn(Schedulers.io())
+        return productDao.deleteAll()
+            .subscribeOn(Schedulers.io())
     }
 }

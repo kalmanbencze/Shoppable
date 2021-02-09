@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.ikea.shoppable.R
 import com.ikea.shoppable.model.Product
+import com.ikea.shoppable.persistence.CartRepository
 import com.ikea.shoppable.persistence.ProductRepository
-import com.ikea.shoppable.view.common.ProductsListAdapter
 import com.ikea.shoppable.view.details.ProductFragment
 import dagger.android.support.DaggerFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -28,6 +29,9 @@ class ListFragment : DaggerFragment() {
 
     @Inject
     lateinit var repository: ProductRepository
+
+    @Inject
+    lateinit var cart: CartRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +51,26 @@ class ListFragment : DaggerFragment() {
                 val args = Bundle()
                 args.putString(ProductFragment.KEY_ID, item.id)
                 findNavController().navigate(R.id.action_open_product, args)
+            }
+
+        }, object : ProductsListAdapter.OnAddClickListener {
+            override fun onAddClicked(item: Product) {
+                compositeDisposable.add(
+                    cart.addToCart(item.id, 1)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            Snackbar.make(view, getString(R.string.label_add_successful), Snackbar.LENGTH_LONG)
+                                .setAction(getString(R.string.action_undo)) {
+                                    cart.removeFromCart(item.id).subscribe({
+                                        Log.d(javaClass.simpleName, "onAddClicked: undone add to cart.")
+                                    }, {
+                                        Log.e(javaClass.simpleName, "onAddClicked: ", it)
+                                    })
+                                }.show()
+                        }, {
+                            Log.e(javaClass.simpleName, "onAddClicked: ", it)
+                        })
+                )
             }
 
         })

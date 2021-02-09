@@ -53,10 +53,12 @@
             android:elevation="0dp"
             android:scaleType="fitCenter"
             android:src="@drawable/selectable_button"
+            android:clickable="true"
             app:backgroundTint="@color/price_green"
             app:fabSize="mini"
             app:layout_constraintBottom_toTopOf="@+id/tv_price"
             app:layout_constraintEnd_toEndOf="parent"
+            android:focusable="true"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

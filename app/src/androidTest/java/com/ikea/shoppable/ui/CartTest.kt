@@ -11,7 +11,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.ikea.shoppable.R
 import com.ikea.shoppable.espresso.ExtraViewMatchers.recyclerViewContains
 import com.ikea.shoppable.espresso.ExtraViewMatchers.recyclerViewContainsAtLeast
-import com.ikea.shoppable.espresso.TestUtils.withRecyclerView
 import com.ikea.shoppable.model.CartItem
 import com.ikea.shoppable.persistence.db.CacheDatabase
 import com.ikea.shoppable.view.MainActivity
@@ -42,7 +41,10 @@ class CartTest {
 
     @Test
     fun testUIAppears() {
-        onView(withText("Shoppable"))
+        Thread.sleep(500)
+        onView(withId(R.id.menu_action_cart))
+            .perform(click())
+        onView(withText(R.string.cart_screen_title))
             .check(matches(isDisplayed()))
         onView(withId(R.id.rv_cart_items))
             .check(matches(isDisplayed()))

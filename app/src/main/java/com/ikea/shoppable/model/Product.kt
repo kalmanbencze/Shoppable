@@ -12,7 +12,7 @@ class Product(
     @ColumnInfo(name = "id")
     val id: String,
     @ColumnInfo(name = "name")
-    val name:  String,
+    val name: String,
     @Embedded
     val price: Price,
     @Embedded
@@ -27,6 +27,7 @@ class Product(
         enum class Type {
             @SerializedName("chair")
             CHAIR,
+
             @SerializedName("couch")
             COUCH
         }

@@ -57,7 +57,7 @@ class CartFragment : DaggerFragment() {
 //        }
         sendButton.setOnClickListener {
             compositeDisposable.add(
-                cart.clearCart()
+                cart.clear()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         Log.d(TAG, "onViewCreated: successfully cleared cart")
@@ -81,7 +81,7 @@ class CartFragment : DaggerFragment() {
         val adapter = CartAdapter(object : CartAdapter.OnRemoveClickListener {
             override fun onItemClicked(item: CartItemProduct) {
                 compositeDisposable.add(
-                    cart.removeFromCart(item.product.id)
+                    cart.remove(item.product.id)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             Log.d(TAG, "onItemClicked: removed element from cart")

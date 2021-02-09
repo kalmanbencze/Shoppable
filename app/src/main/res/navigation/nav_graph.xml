@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/ProductFragment"
         android:name="com.ikea.shoppable.view.details.ProductFragment"
-        android:label="@string/product_screen_title"
+        android:label="@string/empty_string"
         tools:layout="@layout/fragment_product">
         <action
             android:id="@+id/action_open_cart"

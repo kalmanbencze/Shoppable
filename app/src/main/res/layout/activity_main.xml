@@ -13,9 +13,12 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
+            style="@style/Theme.Shoppable"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            app:theme="@style/ThemeOverlay.AppCompat.Light"
+            app:titleTextColor="@color/gray"
             app:popupTheme="@style/Theme.Shoppable.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="56dp"
+        android:paddingBottom="72dp"
         tools:context=".view.list.ListFragment"
         tools:listitem="@layout/item_cart" />
 
@@ -27,7 +27,7 @@
             android:id="@+id/tv_total"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
@@ -46,7 +46,8 @@
             android:id="@+id/btn_checkout"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:layout_margin="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/action_checkout"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"

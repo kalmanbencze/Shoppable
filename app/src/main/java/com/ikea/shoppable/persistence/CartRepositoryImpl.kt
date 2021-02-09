@@ -9,17 +9,17 @@ import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
 class CartRepositoryImpl(val cartDao: CartDao) : CartRepository {
-    override fun addToCart(productId: String, count: Int): Completable {
+    override fun add(productId: String, count: Int): Completable {
         return cartDao.insert(CartItem(productId, count))
             .subscribeOn(Schedulers.io())
     }
 
-    override fun removeFromCart(productId: String): Completable {
+    override fun remove(productId: String): Completable {
         return cartDao.remove(productId)
             .subscribeOn(Schedulers.io())
     }
 
-    override fun clearCart(): Completable {
+    override fun clear(): Completable {
         return cartDao.deleteAll()
             .subscribeOn(Schedulers.io())
     }
@@ -27,7 +27,7 @@ class CartRepositoryImpl(val cartDao: CartDao) : CartRepository {
     override fun getItems(): Observable<List<CartItemProduct>> {
         return cartDao.getAll()
             .map { list ->
-                //sorting the list of entries based on the latest addition in their cart item list
+                //sorting the list of entries based on the latest addition in their "cart item" list attached
                 list.sortedWith(Comparator { o1, o2 ->
                     if (o1.items.isEmpty() || o2.items.isEmpty()) {
                         return@Comparator -1
@@ -46,5 +46,11 @@ class CartRepositoryImpl(val cartDao: CartDao) : CartRepository {
 
     override fun getTotal(): Observable<Price> {
         return cartDao.getTotalValue()
+            .subscribeOn(Schedulers.io())
+    }
+
+    override fun getItem(id: String): Observable<CartItemProduct> {
+        return cartDao.getByProductId(id)
+            .subscribeOn(Schedulers.io())
     }
 }

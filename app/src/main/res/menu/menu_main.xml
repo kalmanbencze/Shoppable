@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.ikea.shoppable.view.MainActivity">
     <item
-        android:id="@+id/action_cart"
+        android:id="@+id/menu_action_cart"
         android:orderInCategory="100"
         android:title="@string/action_reset"
         app:actionLayout="@layout/menu_cart_layout"

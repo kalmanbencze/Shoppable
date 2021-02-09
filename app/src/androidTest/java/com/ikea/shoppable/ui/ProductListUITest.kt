@@ -75,7 +75,7 @@ class ProductListUITest {
 
         onView(
             withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(0, R.id.iv_add_to_cart)
+                .atPositionOnView(0, R.id.btn_add_to_cart)
         ).perform(click())
         onView(withId(com.google.android.material.R.id.snackbar_text))
             .check(matches(withText(R.string.label_add_successful)))
@@ -89,27 +89,27 @@ class ProductListUITest {
 
         onView(
             withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(0, R.id.iv_add_to_cart)
+                .atPositionOnView(0, R.id.btn_add_to_cart)
         ).perform(click())
         onView(
             withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(1, R.id.iv_add_to_cart)
+                .atPositionOnView(1, R.id.btn_add_to_cart)
         ).perform(click())
         onView(
             withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(2, R.id.iv_add_to_cart)
+                .atPositionOnView(2, R.id.btn_add_to_cart)
         ).perform(click())
-        onView(withId(R.id.tv_cart_count)).check(matches(withText("3")))
+        onView(withId(R.id.tv_menu_action_cart_count)).check(matches(withText("3")))
         onView(
             withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(3, R.id.iv_add_to_cart)
+                .atPositionOnView(3, R.id.btn_add_to_cart)
         ).perform(click())
         onView(
             withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(4, R.id.iv_add_to_cart)
+                .atPositionOnView(4, R.id.btn_add_to_cart)
         ).perform(click())
 
-        onView(withId(R.id.tv_cart_count)).check(matches(withText("5")))
+        onView(withId(R.id.tv_menu_action_cart_count)).check(matches(withText("5")))
     }
 
     @Test
@@ -118,15 +118,15 @@ class ProductListUITest {
 
         onView(
             withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(0, R.id.iv_add_to_cart)
+                .atPositionOnView(0, R.id.btn_add_to_cart)
         ).perform(click())
         onView(
             withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(1, R.id.iv_add_to_cart)
+                .atPositionOnView(1, R.id.btn_add_to_cart)
         ).perform(click())
 
-        onView(withId(R.id.tv_cart_count)).check(matches(withText("2")))
-        onView(withId(R.id.iv_cart)).perform(click())
+        onView(withId(R.id.tv_menu_action_cart_count)).check(matches(withText("2")))
+        onView(withId(R.id.iv_menu_action_cart)).perform(click())
         onView(withId(R.id.rv_cart_items)).check(matches(isDisplayed()))
     }
 
@@ -140,6 +140,6 @@ class ProductListUITest {
         ).perform(click())
 
 
-        onView(withId(R.id.tv_cart_count)).check(matches(withText("2")))
+        onView(withId(R.id.tv_menu_action_cart_count)).check(matches(withText("2")))
     }
 }

@@ -30,5 +30,6 @@ class ProductRepositoryImpl(val productDao: ProductDao) : ProductRepository {
 
     override fun getProduct(id: String): Single<Product> {
         return productDao.getById(id)
+            .subscribeOn(Schedulers.io())
     }
 }

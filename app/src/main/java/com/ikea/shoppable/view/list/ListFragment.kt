@@ -64,13 +64,13 @@ class ListFragment : DaggerFragment() {
             }, object : ProductsListAdapter.OnAddClickListener {
                 override fun onAddClicked(item: Product) {
                     compositeDisposable.add(
-                        cart.addToCart(item.id, 1)
+                        cart.add(item.id, 1)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({
                                 Snackbar.make(view, getString(R.string.label_add_successful), Snackbar.LENGTH_SHORT)
                                     .setDuration(1000)
                                     .setAction(getString(R.string.action_undo)) {
-                                        cart.removeFromCart(item.id).subscribe({
+                                        cart.remove(item.id).subscribe({
                                             Log.d(TAG, "onAddClicked: undone add to cart.")
                                         }, {
                                             Log.e(TAG, "onAddClicked: ", it)

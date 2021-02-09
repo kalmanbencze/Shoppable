@@ -12,7 +12,7 @@ import io.reactivex.Single
 interface CartDao {
 
     @Query("SELECT * FROM Products WHERE id = :id")
-    fun getByProductId(id: String): Single<CartItemProduct>
+    fun getByProductId(id: String): Observable<CartItemProduct>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(category: CartItem): Completable

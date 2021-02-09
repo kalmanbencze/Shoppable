@@ -17,10 +17,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
+            android:textColor="@color/gray"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="@color/gray"
-            app:layout_constraintEnd_toEndOf="@+id/iv_add_to_cart"
+            app:layout_constraintEnd_toEndOf="@+id/btn_add_to_cart"
             app:layout_constraintStart_toEndOf="@+id/civ_photo"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Name of product" />
@@ -32,7 +32,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@+id/iv_add_to_cart"
+            app:layout_constraintEnd_toEndOf="@+id/btn_add_to_cart"
             app:layout_constraintStart_toEndOf="@+id/civ_photo"
             app:layout_constraintTop_toBottomOf="@+id/tv_name"
             tools:text="description" />
@@ -41,36 +41,35 @@
             android:id="@+id/civ_photo"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:src="@drawable/ic_launcher_background"
+            android:src="@color/gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_add_to_cart"
-            android:layout_width="48dp"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_to_cart"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:layout_margin="8dp"
-            android:elevation="0dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/selectable_button"
             android:clickable="true"
-            app:backgroundTint="@color/price_green"
-            app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/tv_price"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/add_to_cart_description"
+            android:elevation="0dp"
             android:focusable="true"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="@string/action_add_to_cart"
+            app:cornerRadius="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:strokeColor="@color/primaryColor" />
 
         <TextView
             android:id="@+id/tv_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:textColor="@color/price_green"
+            android:textColor="@color/secondaryColor"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="35 kr" />
 

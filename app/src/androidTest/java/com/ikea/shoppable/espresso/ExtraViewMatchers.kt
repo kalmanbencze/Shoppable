@@ -1,67 +1,34 @@
-package com.ikea.shoppable.espresso;
+package com.ikea.shoppable.espresso
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
-import android.graphics.drawable.VectorDrawable;
-import android.view.View;
-import android.widget.ImageView;
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.matcher.BoundedMatcher
+import org.hamcrest.Description
 
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.espresso.matcher.BoundedMatcher;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-
-public class ExtraViewMatchers {
-
-    public static Matcher<View> withImageDrawable(final int resourceId) {
-        return new BoundedMatcher<View, ImageView>(ImageView.class) {
-            @Override
-            public void describeTo(final Description description) {
-                description.appendText("has image drawable resource " + resourceId);
+object ExtraViewMatchers {
+    fun recyclerViewContainsAtLeast(expectedItemsCount: Int): BoundedMatcher<View?, RecyclerView> {
+        return object : BoundedMatcher<View?, RecyclerView>(RecyclerView::class.java) {
+            override fun describeTo(description: Description) {
+                description.appendText("has at least $expectedItemsCount items")
             }
 
-            @Override
-            public boolean matchesSafely(final ImageView imageView) {
-                return sameBitmap(imageView.getContext(), imageView.getDrawable(), resourceId);
+            public override fun matchesSafely(recyclerView: RecyclerView): Boolean {
+                val adapter = recyclerView.adapter!!
+                return adapter.itemCount >= expectedItemsCount
             }
-        };
+        }
     }
 
-    private static boolean sameBitmap(final Context context, Drawable drawable, final int resourceId) {
-        Drawable otherDrawable = context.getResources().getDrawable(resourceId);
-        if (drawable == null || otherDrawable == null) {
-            return false;
-        }
-        if (drawable instanceof StateListDrawable && otherDrawable instanceof StateListDrawable) {
-            drawable = drawable.getCurrent();
-            otherDrawable = otherDrawable.getCurrent();
-        }
-        if (drawable instanceof BitmapDrawable && otherDrawable instanceof BitmapDrawable) {
-            final Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-            final Bitmap otherBitmap = ((BitmapDrawable) otherDrawable).getBitmap();
-            return bitmap.sameAs(otherBitmap);
-        }
-        return false;
-    }
-
-    public static Matcher<View> recyclerViewContainsAtLeast(final int expectedItemsCount) {
-        return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
-            @Override
-            public void describeTo(final Description description) {
-                description.appendText("has at least " + expectedItemsCount + " items");
+    fun recyclerViewContains(expectedItemsCount: Int): BoundedMatcher<View?, RecyclerView> {
+        return object : BoundedMatcher<View?, RecyclerView>(RecyclerView::class.java) {
+            override fun describeTo(description: Description) {
+                description.appendText("has at least $expectedItemsCount items")
             }
 
-            @Override
-            public boolean matchesSafely(final RecyclerView recyclerView) {
-                final RecyclerView.Adapter adapter = recyclerView.getAdapter();
-                assert adapter != null;
-                return adapter.getItemCount() >= expectedItemsCount;
+            public override fun matchesSafely(recyclerView: RecyclerView): Boolean {
+                val adapter = recyclerView.adapter!!
+                return adapter.itemCount == expectedItemsCount
             }
-        };
+        }
     }
-
 }

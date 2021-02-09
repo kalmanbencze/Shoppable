@@ -1,9 +1,9 @@
 package com.ikea.shoppable.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -44,16 +44,20 @@ class MainActivity : DaggerAppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
-        val cartItem = menu.findItem(R.id.action_cart)
+        val cartItem = menu.findItem(R.id.menu_action_cart)
         cartItem.actionView.setOnClickListener { onOptionsItemSelected(cartItem) }
         compositeDisposable.add(
             repository.getSize()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    cartItem.actionView.findViewById<TextView>(R.id.tv_cart_count).text = if (it > 0) "$it" else ""
-                }, {
-                    Log.e(TAG, "onCreateOptionsMenu: ", it)
-                })
+                .subscribe {
+                    val item = cartItem.actionView.findViewById<TextView>(R.id.tv_menu_action_cart_count)
+                    if (it > 0) {
+                        item.visibility = View.VISIBLE
+                        item.text = "$it"
+                    } else {
+                        item.visibility = View.GONE
+                    }
+                }
         )
         return true
     }
@@ -63,7 +67,7 @@ class MainActivity : DaggerAppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_cart -> {
+            R.id.menu_action_cart -> {
                 val current = navController.currentDestination
                 if (current != null && current.id == R.id.CartFragment) {
                     navController.popBackStack()

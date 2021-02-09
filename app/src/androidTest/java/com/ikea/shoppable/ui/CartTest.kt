@@ -1,16 +1,15 @@
 package com.ikea.shoppable.ui
 
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.ikea.shoppable.R
+import com.ikea.shoppable.espresso.ExtraViewMatchers.recyclerViewContains
 import com.ikea.shoppable.espresso.ExtraViewMatchers.recyclerViewContainsAtLeast
 import com.ikea.shoppable.espresso.TestUtils.withRecyclerView
 import com.ikea.shoppable.model.CartItem
@@ -43,98 +42,52 @@ class CartTest {
 
     @Test
     fun testUIAppears() {
-        onView(withText("Shoppable")).check(matches(isDisplayed()))
-        onView(withId(R.id.rv_cart_items)).check(matches(isDisplayed()))
+        onView(withText("Shoppable"))
+            .check(matches(isDisplayed()))
+        onView(withId(R.id.rv_cart_items))
+            .check(matches(isDisplayed()))
     }
 
     @Test
-    fun test4ElementsVisible() {
-        onView(withId(R.id.rv_product_list)).check(matches(recyclerViewContainsAtLeast(4)))
-
-        onView(withId(R.id.rv_product_list)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(13))
-
-        onView(
-            withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(12, R.id.civ_photo)
-        ).check(matches(isDisplayed()))
-        //vector drawables can't be compared the same way as bitmap drawables so it's disabled for now
-//        onView(withImageDrawable(R.drawable.broken_image_black)).check(matches(isDisplayed())
-
-
-        onView(
-            withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(12, R.id.tv_name)
-        ).check(matches(hasTextColor(R.color.gray)))
-
-        onView(
-            withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(12, R.id.tv_name)
-        ).check(matches(withText("Janinge")))
-        onView(
-            withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(12, R.id.tv_price)
-        ).check(matches(isDisplayed()))
+    fun test4ElementsAdded() {
+        onView(withId(R.id.menu_action_cart))
+            .perform(click())
+        //we check the number of elements
+        onView(withId(R.id.rv_cart_items))
+            .check(
+                matches(
+                    recyclerViewContainsAtLeast(4)
+                )
+            )
+        //we check the total amount after the 8 items have been added
+        onView(withId(R.id.tv_total)).check(
+            matches(
+                withText(
+                    InstrumentationRegistry.getInstrumentation().targetContext.getString(
+                        R.string.label_total,
+                        "38,304 kr"
+                    )
+                )
+            )
+        )
+        //we check the badge on the cart menu action
+        onView(withId(R.id.tv_menu_action_cart_count)).check(matches(withText("8")))
     }
 
-
     @Test
-    fun testAddingItemToCartDisplaysSuccessMessage() {
-        onView(withId(R.id.rv_product_list)).check(matches(recyclerViewContainsAtLeast(1)))
-
-        onView(
-            withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(0, R.id.iv_add_to_cart)
-        ).perform(click())
+    fun testOrderCanBeSent() {
+        onView(withId(R.id.menu_action_cart))
+            .perform(click())
+        onView(withId(R.id.btn_checkout))
+            .perform(click())
         onView(withId(com.google.android.material.R.id.snackbar_text))
-            .check(matches(withText(R.string.label_add_successful)))
-        onView(withId(com.google.android.material.R.id.snackbar_action))
-            .check(matches(withText(R.string.action_undo)))
-    }
+            .check(matches(withText(R.string.message_order_sent)))
 
-    @Test
-    fun testItemsGetPutInCart() {
-        onView(withId(R.id.rv_product_list)).check(matches(recyclerViewContainsAtLeast(5)))
-
-        onView(
-            withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(0, R.id.iv_add_to_cart)
-        ).perform(click())
-        onView(
-            withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(1, R.id.iv_add_to_cart)
-        ).perform(click())
-        onView(
-            withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(2, R.id.iv_add_to_cart)
-        ).perform(click())
-        onView(withId(R.id.tv_cart_count)).check(matches(withText("3")))
-        onView(
-            withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(3, R.id.iv_add_to_cart)
-        ).perform(click())
-        onView(
-            withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(4, R.id.iv_add_to_cart)
-        ).perform(click())
-
-        onView(withId(R.id.tv_cart_count)).check(matches(withText("5")))
-    }
-
-    @Test
-    fun testCartOpens() {
-        onView(withId(R.id.rv_product_list)).check(matches(recyclerViewContainsAtLeast(5)))
-
-        onView(
-            withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(0, R.id.iv_add_to_cart)
-        ).perform(click())
-        onView(
-            withRecyclerView(R.id.rv_product_list)
-                .atPositionOnView(1, R.id.iv_add_to_cart)
-        ).perform(click())
-
-        onView(withId(R.id.tv_cart_count)).check(matches(withText("2")))
-        onView(withId(R.id.iv_cart)).perform(click())
-        onView(withId(R.id.rv_cart_items)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_cart_items))
+            .check(
+                matches(
+                    recyclerViewContains(0)
+                )
+            )
     }
 }

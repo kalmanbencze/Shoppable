@@ -1,7 +1,9 @@
 package com.ikea.shoppable.view.list
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +12,7 @@ import com.ikea.shoppable.model.Product
 import com.ikea.shoppable.view.common.AutoUpdatableAdapter
 import com.ikea.shoppable.view.common.inflate
 import com.ikea.shoppable.view.common.loadUrlToCircle
+import java.util.*
 import kotlin.properties.Delegates
 
 class ProductsListAdapter(
@@ -52,9 +55,11 @@ class ProductsListAdapter(
                 itemView.findViewById<ImageView>(R.id.civ_photo).loadUrlToCircle(product.imageUrl)
 
                 itemView.findViewById<TextView>(R.id.tv_name).text = product.name
-                itemView.findViewById<TextView>(R.id.tv_description).text = product.info.toString()
+                @SuppressLint("SetTextI18n")
+                itemView.findViewById<TextView>(R.id.tv_description).text =
+                    "${" • " + product.type.name.toLowerCase(Locale.getDefault())}\n${product.info}"
                 itemView.findViewById<TextView>(R.id.tv_price).text = product.price.toString()
-                itemView.findViewById<ImageView>(R.id.iv_add_to_cart).setOnClickListener {
+                itemView.findViewById<Button>(R.id.btn_add_to_cart).setOnClickListener {
                     addClickListener.onAddClicked(product)
                 }
         }

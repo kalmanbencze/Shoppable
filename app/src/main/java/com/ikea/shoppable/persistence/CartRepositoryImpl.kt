@@ -2,7 +2,6 @@ package com.ikea.shoppable.persistence
 
 import com.ikea.shoppable.model.CartItem
 import com.ikea.shoppable.model.CartItemProduct
-import com.ikea.shoppable.model.Product
 import com.ikea.shoppable.persistence.db.CartDao
 import io.reactivex.Completable
 import io.reactivex.Observable

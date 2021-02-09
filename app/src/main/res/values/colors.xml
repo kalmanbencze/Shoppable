@@ -13,4 +13,5 @@
     <color name="secondaryTextColor">#ffffff</color>
     <color name="price_green">#4caf50</color>
     <color name="price_green_pressed">#43a047</color>
+    <color name="light_gray">#F2F2F2</color>
 </resources>

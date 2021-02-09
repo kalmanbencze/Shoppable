@@ -1,15 +1,10 @@
 package com.ikea.shoppable.view.list
 
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.ikea.shoppable.R
 import com.ikea.shoppable.model.Product
 import com.ikea.shoppable.view.common.AutoUpdatableAdapter

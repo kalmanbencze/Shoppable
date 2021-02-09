@@ -24,6 +24,8 @@ import javax.inject.Inject
  */
 class ListFragment : DaggerFragment() {
 
+    private val TAG: String = javaClass.simpleName
+
     private val compositeDisposable = CompositeDisposable()
     private lateinit var productList: RecyclerView
 
@@ -62,13 +64,13 @@ class ListFragment : DaggerFragment() {
                             Snackbar.make(view, getString(R.string.label_add_successful), Snackbar.LENGTH_LONG)
                                 .setAction(getString(R.string.action_undo)) {
                                     cart.removeFromCart(item.id).subscribe({
-                                        Log.d(javaClass.simpleName, "onAddClicked: undone add to cart.")
+                                        Log.d(TAG, "onAddClicked: undone add to cart.")
                                     }, {
-                                        Log.e(javaClass.simpleName, "onAddClicked: ", it)
+                                        Log.e(TAG, "onAddClicked: ", it)
                                     })
                                 }.show()
                         }, {
-                            Log.e(javaClass.simpleName, "onAddClicked: ", it)
+                            Log.e(TAG, "onAddClicked: ", it)
                         })
                 )
             }
@@ -79,7 +81,7 @@ class ListFragment : DaggerFragment() {
         compositeDisposable.add(repository.getProducts().observeOn(AndroidSchedulers.mainThread()).subscribe({
             adapter.items = it
         }, {
-            Log.e(javaClass.simpleName, "onViewCreated: ", it)
+            Log.e(TAG, "onViewCreated: ", it)
         }))
     }
 

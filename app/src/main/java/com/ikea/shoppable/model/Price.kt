@@ -2,8 +2,7 @@ package com.ikea.shoppable.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.ikea.shoppable.view.common.format
+import com.ikea.shoppable.view.common.formatTo2Decimals
 
 @Entity
 class Price(
@@ -14,6 +13,6 @@ class Price(
 ) {
     override fun toString(): String {
 
-        return "${value.format(2)} $currency"
+        return "${value.formatTo2Decimals()} $currency"
     }
 }

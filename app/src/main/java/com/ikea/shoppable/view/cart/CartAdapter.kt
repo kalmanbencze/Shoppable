@@ -6,13 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.ikea.shoppable.R
 import com.ikea.shoppable.model.CartItemProduct
 import com.ikea.shoppable.view.common.AutoUpdatableAdapter
-import com.ikea.shoppable.view.common.format
+import com.ikea.shoppable.view.common.formatTo2Decimals
 import com.ikea.shoppable.view.common.inflate
 import com.ikea.shoppable.view.common.loadUrlToCircle
 import kotlin.properties.Delegates
@@ -57,7 +54,7 @@ class CartAdapter(private val removeClickListener: OnRemoveClickListener) :
         }
 
         private fun formatPrice(item: CartItemProduct): String {
-            return (item.product.price.value * item.items.size).format(2)
+            return (item.product.price.value * item.items.size).formatTo2Decimals()
         }
     }
 }

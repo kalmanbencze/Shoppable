@@ -9,13 +9,21 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.ikea.shoppable.R
+import java.text.DecimalFormat
 
 
-fun Double.format(digits: Int) = "%.${digits}f".format(this)
+fun Double.formatTo2Decimals(): String {
+    var dec = DecimalFormat("#,###.00")
+    if (toInt().toDouble() == this) {
+        dec = DecimalFormat("#,###")
+    }
+    return dec.format(this)
+}
 
 
 fun ImageView.loadUrlToCircle(url: String) {
-    Glide.with(context).load(url).placeholder(R.drawable.broken_image_black)
+    Glide.with(context).load(url)
+        .error(R.drawable.broken_image_black)
         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).apply(
             RequestOptions.circleCropTransform()
         ).into(this)

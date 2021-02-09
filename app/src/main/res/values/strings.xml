@@ -6,6 +6,9 @@
     <string name="product_screen_title">Product</string>
     <string name="label_add_successful">Product has been added to the cart!</string>
     <string name="action_undo">Undo</string>
+    <string name="action_send">SEND</string>
+    <string name="action_clear">CLEAR</string>
+    <string name="message_order_sent">Your order has been sent!</string>
     <!-- Strings used for fragments for navigation -->
 
 </resources>

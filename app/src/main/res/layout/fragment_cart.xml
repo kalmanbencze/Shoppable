@@ -6,17 +6,36 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_cart_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.list.ListFragment"
+        android:clipToPadding="false"
+        android:paddingBottom="56dp"
         tools:listitem="@layout/item_product" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="38dp"
-        android:src="@drawable/check_circle_outline"
-        app:fabSize="normal"
+    <Button
+        android:id="@+id/btn_clear_cart"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="56dp"
+        android:layout_margin="8dp"
+        android:backgroundTint="@color/white"
+        android:text="@string/action_clear"
+        android:textColor="@color/black"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/btn_send"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_send"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_margin="8dp"
+        android:text="@string/action_send"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_clear_cart"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

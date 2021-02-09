@@ -4,7 +4,6 @@ import com.ikea.shoppable.model.Product
 import com.ikea.shoppable.persistence.db.ProductDao
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 
 class ProductRepositoryImpl(val productDao: ProductDao) : ProductRepository {

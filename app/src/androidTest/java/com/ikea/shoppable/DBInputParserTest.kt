@@ -2,7 +2,7 @@ package com.ikea.shoppable
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ikea.shoppable.persistence.db.DBInputParser
+import com.ikea.shoppable.persistence.db.util.DBInputParser
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,8 +18,10 @@ class DBInputParserTest {
     fun parseInputFile() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        val path = "test_products.json"
+        val path = "products.json"
         val products = DBInputParser.readProducts(appContext, path)
-        assert(products.size == 2)
+        assert(products.size == 14)
+        assert(products.get(0).info.material == "wood with cover")
+        assert(products.get(5).info.numberOfSeats == 5)
     }
 }

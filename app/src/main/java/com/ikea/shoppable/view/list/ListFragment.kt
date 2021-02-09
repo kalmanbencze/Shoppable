@@ -24,10 +24,11 @@ import javax.inject.Inject
  */
 class ListFragment : DaggerFragment() {
 
+    private var savedView: View? = null
     private val TAG: String = javaClass.simpleName
 
     private val compositeDisposable = CompositeDisposable()
-    private lateinit var productList: RecyclerView
+    private var productList: RecyclerView? = null
 
     @Inject
     lateinit var repository: ProductRepository
@@ -39,50 +40,57 @@ class ListFragment : DaggerFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_list, container, false)
+        //todo use viewmodel
+        if (savedView == null) {
+            savedView = inflater.inflate(R.layout.fragment_list, container, false)
+        }
+        return savedView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        productList = view as RecyclerView
-        productList.layoutManager = LinearLayoutManager(context)
-        val adapter = ProductsListAdapter(object : ProductsListAdapter.OnItemClickListener {
-            override fun onItemClicked(item: Product) {
+        if (productList == null) {
+            productList = view as RecyclerView
+            productList!!.layoutManager = LinearLayoutManager(context)
+            val adapter = ProductsListAdapter(object : ProductsListAdapter.OnItemClickListener {
+                override fun onItemClicked(item: Product) {
 
-                val args = Bundle()
-                args.putString(ProductFragment.KEY_ID, item.id)
-                findNavController().navigate(R.id.action_open_product, args)
-            }
+                    val args = Bundle()
+                    args.putString(ProductFragment.KEY_ID, item.id)
+                    findNavController().navigate(R.id.action_open_product, args)
+                }
 
-        }, object : ProductsListAdapter.OnAddClickListener {
-            override fun onAddClicked(item: Product) {
-                compositeDisposable.add(
-                    cart.addToCart(item.id, 1)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            Snackbar.make(view, getString(R.string.label_add_successful), Snackbar.LENGTH_LONG)
-                                .setAction(getString(R.string.action_undo)) {
-                                    cart.removeFromCart(item.id).subscribe({
-                                        Log.d(TAG, "onAddClicked: undone add to cart.")
-                                    }, {
-                                        Log.e(TAG, "onAddClicked: ", it)
-                                    })
-                                }.show()
-                        }, {
-                            Log.e(TAG, "onAddClicked: ", it)
-                        })
-                )
-            }
+            }, object : ProductsListAdapter.OnAddClickListener {
+                override fun onAddClicked(item: Product) {
+                    compositeDisposable.add(
+                        cart.addToCart(item.id, 1)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({
+                                Snackbar.make(view, getString(R.string.label_add_successful), Snackbar.LENGTH_SHORT)
+                                    .setDuration(1000)
+                                    .setAction(getString(R.string.action_undo)) {
+                                        cart.removeFromCart(item.id).subscribe({
+                                            Log.d(TAG, "onAddClicked: undone add to cart.")
+                                        }, {
+                                            Log.e(TAG, "onAddClicked: ", it)
+                                        })
+                                    }.show()
+                            }, {
+                                Log.e(TAG, "onAddClicked: ", it)
+                            })
+                    )
+                }
 
-        })
-        productList.adapter = adapter
+            })
+            productList!!.adapter = adapter
 
-        compositeDisposable.add(repository.getProducts().observeOn(AndroidSchedulers.mainThread()).subscribe({
-            adapter.items = it
-        }, {
-            Log.e(TAG, "onViewCreated: ", it)
-        }))
+            compositeDisposable.add(repository.getProducts().observeOn(AndroidSchedulers.mainThread()).subscribe({
+                adapter.items = it
+            }, {
+                Log.e(TAG, "onViewCreated: ", it)
+            }))
+        }
     }
 
     override fun onStop() {

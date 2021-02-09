@@ -2,6 +2,7 @@ package com.ikea.shoppable.persistence
 
 import com.ikea.shoppable.model.CartItem
 import com.ikea.shoppable.model.CartItemProduct
+import com.ikea.shoppable.model.Price
 import com.ikea.shoppable.persistence.db.CartDao
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -26,8 +27,9 @@ class CartRepositoryImpl(val cartDao: CartDao) : CartRepository {
     override fun getItems(): Observable<List<CartItemProduct>> {
         return cartDao.getAll()
             .map { list ->
+                //sorting the list of entries based on the latest addition in their cart item list
                 list.sortedWith(Comparator { o1, o2 ->
-                    if (o1.items.isEmpty()) {
+                    if (o1.items.isEmpty() || o2.items.isEmpty()) {
                         return@Comparator -1
                     }
                     return@Comparator (o1.items.maxOf { it.date } - o2.items.maxOf { it.date }).toInt()
@@ -40,5 +42,9 @@ class CartRepositoryImpl(val cartDao: CartDao) : CartRepository {
     override fun getSize(): Observable<Int> {
         return cartDao.getSize()
             .subscribeOn(Schedulers.io())
+    }
+
+    override fun getTotal(): Observable<Price> {
+        return cartDao.getTotalValue()
     }
 }

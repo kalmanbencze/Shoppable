@@ -19,6 +19,7 @@
             android:layout_marginStart="16dp"
             android:textSize="22sp"
             android:textStyle="bold"
+            android:textColor="@color/gray"
             app:layout_constraintEnd_toEndOf="@+id/iv_add_to_cart"
             app:layout_constraintStart_toEndOf="@+id/civ_photo"
             app:layout_constraintTop_toTopOf="parent"

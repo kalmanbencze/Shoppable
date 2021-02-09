@@ -3,6 +3,7 @@ package com.ikea.shoppable.persistence.db
 import androidx.room.*
 import com.ikea.shoppable.model.CartItem
 import com.ikea.shoppable.model.CartItemProduct
+import com.ikea.shoppable.model.Price
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -26,10 +27,20 @@ interface CartDao {
     @Query("SELECT * FROM Products")
     fun getAll(): Observable<List<CartItemProduct>>
 
-    @Query("SELECT SUM(count) FROM Cart")
+    @Query("SELECT COALESCE(SUM(count), 0) AS val FROM Cart")
     fun getSize(): Observable<Int>
 
     @Query("DELETE FROM Cart")
     fun deleteAll(): Completable
+
+    @Query(
+        """
+        SELECT COALESCE(SUM(Cart.count * Products.value), 0) 
+            AS value, Products.currency 
+        FROM Products LEFT JOIN Cart 
+            ON Products.id = Cart.productId 
+        """
+    )
+    fun getTotalValue(): Observable<Price>
 
 }

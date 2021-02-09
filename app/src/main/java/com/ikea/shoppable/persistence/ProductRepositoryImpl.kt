@@ -4,6 +4,7 @@ import com.ikea.shoppable.model.Product
 import com.ikea.shoppable.persistence.db.ProductDao
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
 class ProductRepositoryImpl(val productDao: ProductDao) : ProductRepository {
@@ -25,5 +26,9 @@ class ProductRepositoryImpl(val productDao: ProductDao) : ProductRepository {
     override fun clearCache(): Completable {
         return productDao.deleteAll()
             .subscribeOn(Schedulers.io())
+    }
+
+    override fun getProduct(id: String): Single<Product> {
+        return productDao.getById(id)
     }
 }

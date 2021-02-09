@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,8 +25,9 @@ import javax.inject.Inject
 class CartFragment : DaggerFragment() {
 
     private val TAG: String = javaClass.simpleName
-    private lateinit var clearButton: Button
+    private lateinit var total: TextView
     private lateinit var sendButton: Button
+    private lateinit var clearButton: Button
     private val compositeDisposable = CompositeDisposable()
     private lateinit var productList: RecyclerView
 
@@ -43,29 +45,38 @@ class CartFragment : DaggerFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         productList = view.findViewById(R.id.rv_cart_items)
-        clearButton = view.findViewById(R.id.btn_clear_cart)
-        sendButton = view.findViewById(R.id.btn_send)
+        total = view.findViewById(R.id.tv_total)
+        sendButton = view.findViewById(R.id.btn_checkout)
 
-        clearButton.setOnClickListener {
-            compositeDisposable.add(cart.clearCart().subscribe({
-                Log.d(TAG, "onViewCreated: successfully cleared cart")
-            }, {
-                Log.e(TAG, "onViewCreated: ", it)
-            }))
-        }
+//        clearButton.setOnClickListener {
+//            compositeDisposable.add(cart.clearCart().subscribe({
+//                Log.d(TAG, "onViewCreated: successfully cleared cart")
+//            }, {
+//                Log.e(TAG, "onViewCreated: ", it)
+//            }))
+//        }
         sendButton.setOnClickListener {
             compositeDisposable.add(
                 cart.clearCart()
-                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         Log.d(TAG, "onViewCreated: successfully cleared cart")
-                        Snackbar.make(view, getString(R.string.message_order_sent), Snackbar.LENGTH_INDEFINITE).show()
+                        Snackbar.make(view, getString(R.string.message_order_sent), Snackbar.LENGTH_LONG).show()
                         findNavController().popBackStack()
                     }, {
                         Log.e(TAG, "onViewCreated: ", it)
                     })
             )
         }
+        compositeDisposable.add(
+            cart.getTotal()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    total.text = getString(R.string.label_total, it.toString())
+                }, {
+
+                })
+        )
         productList.layoutManager = LinearLayoutManager(context)
         val adapter = CartAdapter(object : CartAdapter.OnRemoveClickListener {
             override fun onItemClicked(item: CartItemProduct) {

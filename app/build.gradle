@@ -15,7 +15,12 @@ android {
         versionCode 1
         versionName "1.0"
 
+//        buildConfigField "boolean", "IS_ESPRESSO", "false"
+//        buildConfigField "String", "INPUT_FILE_PATH", "\"products.json\""
+//
+//        testBuildType "espresso"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += ["room.schemaLocation": "$projectDir/schemas".toString(),
@@ -39,8 +44,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+//        espresso {
+//            signingConfig signingConfigs.debug
+//            matchingFallbacks = ["debug"]
+//            debuggable true
+//            buildConfigField "String", "INPUT_FILE_PATH", "\"test_products.json\""
+//            buildConfigField "boolean", "IS_ESPRESSO", "true"
+//        }
     }
-
     dexOptions {
         javaMaxHeapSize "4096M"
     }

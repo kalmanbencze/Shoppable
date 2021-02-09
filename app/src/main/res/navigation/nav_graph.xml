@@ -24,16 +24,19 @@
         android:label="@string/cart_screen_title"
         tools:layout="@layout/fragment_cart">
 
-        <action
-            android:id="@+id/action_open_product"
-            app:destination="@id/ProductFragment" />
+        <!--        <action-->
+        <!--            android:id="@+id/action_open_product"-->
+        <!--            app:destination="@id/ProductFragment" />-->
 
     </fragment>
     <fragment
         android:id="@+id/ProductFragment"
         android:name="com.ikea.shoppable.view.details.ProductFragment"
         android:label="@string/product_screen_title"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/fragment_product">
+        <action
+            android:id="@+id/action_open_cart"
+            app:destination="@id/CartFragment" />
 
     </fragment>
 </navigation>

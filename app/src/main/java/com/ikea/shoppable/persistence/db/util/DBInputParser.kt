@@ -1,4 +1,4 @@
-package com.ikea.shoppable.persistence.db
+package com.ikea.shoppable.persistence.db.util
 
 import android.content.Context
 import com.google.gson.Gson

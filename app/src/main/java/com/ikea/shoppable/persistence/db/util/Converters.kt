@@ -1,4 +1,4 @@
-package com.ikea.shoppable.persistence.db
+package com.ikea.shoppable.persistence.db.util
 
 import androidx.room.TypeConverter
 import com.ikea.shoppable.model.Product

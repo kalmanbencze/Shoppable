@@ -29,6 +29,12 @@ fun ImageView.loadUrlToCircle(url: String) {
         ).into(this)
 }
 
+fun ImageView.loadUrl(url: String) {
+    Glide.with(context).load(url)
+        .error(R.drawable.broken_image_black)
+        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(this)
+}
+
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View {
     return LayoutInflater.from(context).inflate(layoutRes, this, false)
 }

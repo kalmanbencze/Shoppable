@@ -2,6 +2,7 @@ package com.ikea.shoppable.di.modules
 
 import androidx.lifecycle.ViewModel
 import com.ikea.shoppable.view.AppBarViewModel
+import com.ikea.shoppable.view.cart.CartViewModel
 import com.ikea.shoppable.view.details.ProductViewModel
 import com.ikea.shoppable.view.list.ListViewModel
 import dagger.Binds
@@ -25,4 +26,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ListViewModel::class)
     abstract fun bindsListViewModel(viewModel: ListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CartViewModel::class)
+    abstract fun bindsCartViewModel(viewModel: CartViewModel): ViewModel
 }

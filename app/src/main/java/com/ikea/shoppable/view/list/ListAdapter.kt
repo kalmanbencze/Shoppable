@@ -62,6 +62,6 @@ class ListAdapter(
                 itemView.findViewById<Button>(R.id.btn_add_to_cart).setOnClickListener {
                     addClickListener.onAddClicked(product)
                 }
-        }
+            }
     }
 }

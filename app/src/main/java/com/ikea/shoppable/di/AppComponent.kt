@@ -1,10 +1,7 @@
 package com.ikea.shoppable.di
 
 import com.ikea.shoppable.ShoppableApp
-import com.ikea.shoppable.di.modules.ActivityBindingModule
-import com.ikea.shoppable.di.modules.AppModule
-import com.ikea.shoppable.di.modules.CacheModule
-import com.ikea.shoppable.di.modules.FragmentBindingModule
+import com.ikea.shoppable.di.modules.*
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -21,9 +18,12 @@ import javax.inject.Singleton
         AndroidSupportInjectionModule::class,
         AppModule::class,
         CacheModule::class,
+        ViewModelModule::class,
+        ViewModelFactoryModule::class,
         ActivityBindingModule::class,
         FragmentBindingModule::class,
-    ))
+    )
+)
 interface AppComponent : AndroidInjector<DaggerApplication> {
 
     fun inject(application: ShoppableApp)

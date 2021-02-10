@@ -6,11 +6,11 @@ import com.ikea.shoppable.model.CartItemProduct
 import com.ikea.shoppable.model.Price
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Single
 
 @Dao
 interface CartDao {
 
+    @Transaction
     @Query("SELECT * FROM Products WHERE id = :id")
     fun getByProductId(id: String): Observable<CartItemProduct>
 
@@ -32,6 +32,9 @@ interface CartDao {
 
     @Query("SELECT COALESCE(SUM(count), 0) AS val FROM Cart")
     fun getSize(): Observable<Int>
+
+    @Query("SELECT COALESCE(SUM(count), 0) AS val FROM Cart WHERE productId = :id")
+    fun getProductCount(id: String): Observable<Int>
 
     @Query("DELETE FROM Cart")
     fun deleteAll(): Completable

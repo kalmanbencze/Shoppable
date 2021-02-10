@@ -32,4 +32,8 @@ class Product(
             COUCH
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        return other is Product && other.id == id
+    }
 }

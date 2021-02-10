@@ -31,21 +31,17 @@ class CartRepositoryImpl(val cartDao: CartDao) : CartRepository {
 
     override fun getItems(): Observable<List<CartItemProduct>> {
         return cartDao.getAll()
-            .map { list ->
-                //sorting the list of entries based on the latest addition in their "cart item" list attached
-                list.sortedWith(Comparator { o1, o2 ->
-                    if (o1.items.isEmpty() || o2.items.isEmpty()) {
-                        return@Comparator -1
-                    }
-                    return@Comparator (o1.items.maxOf { it.date } - o2.items.maxOf { it.date }).toInt()
-                })
-            }
             .subscribeOn(Schedulers.io())
             .map { list -> list.filter { it.items.isNotEmpty() } }
     }
 
     override fun getSize(): Observable<Int> {
         return cartDao.getSize()
+            .subscribeOn(Schedulers.io())
+    }
+
+    override fun getProductCount(id: String): Observable<Int> {
+        return cartDao.getProductCount(id)
             .subscribeOn(Schedulers.io())
     }
 

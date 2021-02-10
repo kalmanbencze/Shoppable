@@ -1,7 +1,5 @@
 package com.ikea.shoppable.view.common
 
-import android.content.Context
-import android.content.res.Resources
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View

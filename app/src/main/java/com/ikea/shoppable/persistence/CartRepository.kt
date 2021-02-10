@@ -12,6 +12,7 @@ interface CartRepository {
     fun clear(): Completable
     fun getItems(): Observable<List<CartItemProduct>>
     fun getSize(): Observable<Int>
+    fun getProductCount(id: String): Observable<Int>
     fun getTotal(): Observable<Price>
     fun getItem(id: String): Observable<CartItemProduct>
 }

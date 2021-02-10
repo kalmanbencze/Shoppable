@@ -50,7 +50,7 @@ open class CartRobot(val context: Context) {
             .perform(ViewActions.click())
     }
 
-    fun checkNumberOfItemsInCart(expectedItemsCount: Int) {
+    fun checkNumberOfItemsInList(expectedItemsCount: Int) {
         onView(withId(R.id.rv_cart_items))
             .check(
                 matches(
@@ -96,6 +96,20 @@ open class CartRobot(val context: Context) {
             withRecyclerView(R.id.rv_cart_items)
                 .atPositionOnView(0, R.id.iv_remove_from_cart)
         ).perform(ViewActions.click())
+    }
+
+    fun swipeLeftToDelete(index: Int) {
+        onView(
+            withRecyclerView(R.id.rv_cart_items)
+                .atPosition(index)
+        ).perform(ViewActions.swipeLeft())
+    }
+
+    fun swipeRightToDelete(index: Int) {
+        onView(
+            withRecyclerView(R.id.rv_cart_items)
+                .atPosition(index)
+        ).perform(ViewActions.swipeRight())
     }
 
 }

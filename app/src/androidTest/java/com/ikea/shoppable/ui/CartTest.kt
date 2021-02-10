@@ -37,7 +37,7 @@ class CartTest {
         robot.openCart()
 
         //we check the number of elements
-        robot.checkNumberOfItemsInCart(4)
+        robot.checkNumberOfItemsInList(4)
 
         //we check the total amount after the 8 items have been added
         robot.checkTotalAmountIs("12,424 kr")
@@ -58,7 +58,7 @@ class CartTest {
 
             //we check the total amount in the cart is 0 and the cart is empty
             openCart()
-            checkNumberOfItemsInCart(0)
+            checkNumberOfItemsInList(0)
             checkTotalAmountIs("0 kr")
         }
     }
@@ -67,14 +67,27 @@ class CartTest {
     fun testItemCanBeRemoved() {
         robot.apply {
             openCart()
-            checkNumberOfItemsInCart(4)
+            checkNumberOfItemsInList(4)
             //we remove one item and check the remaining items count
             removeFirstItemFromCart()
-            checkNumberOfItemsInCart(3)
+            checkNumberOfItemsInList(3)
             //we remove 2 more and check the number of items
             removeFirstItemFromCart()
             removeFirstItemFromCart()
-            checkNumberOfItemsInCart(1)
+            checkNumberOfItemsInList(1)
+        }
+    }
+
+    @Test
+    fun testItemCanBeRemovedBySwipingLeftOrRight() {
+        robot.apply {
+            openCart()
+            checkNumberOfItemsInList(4)
+            //we remove one item and check the remaining items count
+            swipeLeftToDelete(1)
+            checkNumberOfItemsInList(3)
+            swipeRightToDelete(1)
+            checkNumberOfItemsInList(2)
         }
     }
 }

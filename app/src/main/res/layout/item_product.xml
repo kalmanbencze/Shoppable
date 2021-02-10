@@ -69,8 +69,8 @@
             android:textColor="@color/secondaryColor"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="35 kr" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

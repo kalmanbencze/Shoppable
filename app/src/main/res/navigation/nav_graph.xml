@@ -42,7 +42,9 @@
             android:id="@+id/action_open_cart"
             app:destination="@id/CartFragment"
             app:enterAnim="@anim/slide_in_top"
-            app:exitAnim="@anim/fade_out_fast" />
+            app:exitAnim="@anim/fade_out_fast"
+            app:popEnterAnim="@anim/fade_in_fast"
+            app:popExitAnim="@anim/slide_out_top" />
 
     </fragment>
 </navigation>

@@ -5,31 +5,32 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.ikea.shoppable.R
-import com.ikea.shoppable.persistence.CartRepository
+import com.ikea.shoppable.view.common.ViewModelProviderFactory
 import dagger.android.support.DaggerAppCompatActivity
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity() {
 
+    private lateinit var viewModel: AppBarViewModel
     private var cartItemCount: Int = 0
     private var badgeText: TextView? = null
     private lateinit var navController: NavController
-    private val TAG: String = javaClass.simpleName
     private val compositeDisposable = CompositeDisposable()
 
     @Inject
-    lateinit var repository: CartRepository
+    lateinit var providerFactory: ViewModelProviderFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
+        viewModel = ViewModelProvider(this, providerFactory)[AppBarViewModel::class.java]
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -37,6 +38,22 @@ class MainActivity : DaggerAppCompatActivity() {
 
         navController = findNavController(R.id.nav_host_fragment)
         NavigationUI.setupActionBarWithNavController(this, navController)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        compositeDisposable.add(viewModel.getCartSize().subscribe {
+            if (badgeText != null) {
+                setBadgeText(it)
+            } else {
+                cartItemCount = it
+            }
+        })
+    }
+
+    override fun onStop() {
+        compositeDisposable.clear()
+        super.onStop()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -54,30 +71,6 @@ class MainActivity : DaggerAppCompatActivity() {
             onOptionsItemSelected(cartMenuItem)
         }
         return true
-    }
-
-    private fun setBadgeText(count: Int) {
-        if (count > 0) {
-            badgeText?.visibility = View.VISIBLE
-            badgeText?.text = "$count"
-        } else {
-            badgeText?.visibility = View.GONE
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        compositeDisposable.add(
-            repository.getSize()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { value ->
-                    if (badgeText != null) {
-                        setBadgeText(value)
-                    } else {
-                        cartItemCount = value
-                    }
-                }
-        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -98,8 +91,12 @@ class MainActivity : DaggerAppCompatActivity() {
         }
     }
 
-    override fun onStop() {
-        compositeDisposable.clear()
-        super.onStop()
+    private fun setBadgeText(count: Int) {
+        if (count > 0) {
+            badgeText?.visibility = View.VISIBLE
+            badgeText?.text = "$count"
+        } else {
+            badgeText?.visibility = View.GONE
+        }
     }
 }

@@ -14,15 +14,15 @@ import com.ikea.shoppable.view.common.AutoUpdatableAdapter
 import com.ikea.shoppable.view.common.formatTo2Decimals
 import com.ikea.shoppable.view.common.inflate
 import com.ikea.shoppable.view.common.loadUrlToCircle
+import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.properties.Delegates
 
 
 class CartAdapter(private val removeClickListener: OnRemoveClickListener) :
     RecyclerView.Adapter<CartAdapter.ProductViewHolder>(), AutoUpdatableAdapter {
 
-    private var recentlyDeletedItemPosition: Int = -1
-    private var recentlyDeletedItem: CartItemProduct? = null
-    var items: ArrayList<CartItemProduct> by Delegates.observable(arrayListOf()) { _, old, new ->
+    private var recentlyDeletedItems: ConcurrentLinkedQueue<Pair<Int, CartItemProduct>> = ConcurrentLinkedQueue()
+    var items: MutableList<CartItemProduct> by Delegates.observable(arrayListOf()) { _, old, new ->
         autoNotify(old, new) { o, n -> o.product.id == n.product.id }
     }
 
@@ -39,11 +39,19 @@ class CartAdapter(private val removeClickListener: OnRemoveClickListener) :
     }
 
     fun deleteItem(viewHolder: RecyclerView.ViewHolder, position: Int) {
-        recentlyDeletedItem = items[position]
-        recentlyDeletedItemPosition = position
+        recentlyDeletedItems.add(Pair(position, items[position]))
         items.removeAt(position)
         notifyItemRemoved(position)
         showUndoSnackbar(viewHolder)
+    }
+
+    private fun deleteRecentlyDeleted() {
+        while (recentlyDeletedItems.isNotEmpty()) {
+            val item = recentlyDeletedItems.poll()
+            item?.let {
+                removeClickListener.onItemSwiped(it.second)
+            }
+        }
     }
 
 
@@ -58,12 +66,8 @@ class CartAdapter(private val removeClickListener: OnRemoveClickListener) :
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                 super.onDismissed(transientBottomBar, event)
                 //we ignore in case it was undone
-                if (event != BaseCallback.DISMISS_EVENT_ACTION) {
-                    recentlyDeletedItem?.let {
-                        removeClickListener.onItemSwiped(it)
-                    }
-                    recentlyDeletedItem = null
-                    recentlyDeletedItemPosition = -1
+                if (event != BaseCallback.DISMISS_EVENT_ACTION || event != BaseCallback.DISMISS_EVENT_CONSECUTIVE) {
+                    deleteRecentlyDeleted()
                 }
             }
         })
@@ -71,12 +75,12 @@ class CartAdapter(private val removeClickListener: OnRemoveClickListener) :
     }
 
     private fun undoDelete() {
-        recentlyDeletedItem?.let {
-            items.add(
-                recentlyDeletedItemPosition,
-                it
-            )
-            notifyItemInserted(recentlyDeletedItemPosition)
+        while (recentlyDeletedItems.isNotEmpty()) {
+            val item = recentlyDeletedItems.poll()
+            item?.let {
+                items.add(it.first, it.second)
+                notifyItemInserted(it.first)
+            }
         }
     }
 

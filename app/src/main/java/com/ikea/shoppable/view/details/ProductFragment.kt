@@ -1,25 +1,22 @@
 package com.ikea.shoppable.view.details
 
 import android.animation.Animator
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewPropertyAnimator
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.ikea.shoppable.R
-import com.ikea.shoppable.persistence.CartRepository
-import com.ikea.shoppable.persistence.ProductRepository
 import com.ikea.shoppable.view.common.EmptyAnimatorListener
-import com.ikea.shoppable.view.common.dpToPx
+import com.ikea.shoppable.view.common.ViewModelProviderFactory
 import com.ikea.shoppable.view.common.loadUrl
 import dagger.android.support.DaggerFragment
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
@@ -29,13 +26,9 @@ import javax.inject.Inject
  */
 class ProductFragment : DaggerFragment() {
 
-    private var offset: Float = 0f
-    private lateinit var countLabel: TextView
+    private lateinit var countBadge: TextView
     private lateinit var addToCart: FloatingActionButton
 
-    //    private lateinit var increase: FloatingActionButton
-//    private lateinit var decrease: FloatingActionButton
-    private val TAG: String = javaClass.simpleName
     private val compositeDisposable = CompositeDisposable()
     private lateinit var name: TextView
     private lateinit var info: TextView
@@ -43,17 +36,18 @@ class ProductFragment : DaggerFragment() {
     private lateinit var price: TextView
     private lateinit var photo: ImageView
 
-    @Inject
-    lateinit var cart: CartRepository
+    private lateinit var viewModel: ProductViewModel
 
     @Inject
-    lateinit var repository: ProductRepository
+    lateinit var providerFactory: ViewModelProviderFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_product, container, false)
+        val view = inflater.inflate(R.layout.fragment_product, container, false)
+        viewModel = ViewModelProvider(this, providerFactory)[ProductViewModel::class.java]
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,73 +58,62 @@ class ProductFragment : DaggerFragment() {
         type = view.findViewById(R.id.tv_type)
         price = view.findViewById(R.id.tv_price)
         addToCart = view.findViewById(R.id.btn_add_to_cart)
-        countLabel = view.findViewById(R.id.tv_count)
+        countBadge = view.findViewById(R.id.tv_count)
+        hideBadgeInstant()
 
-
-        offset = dpToPx(100f)
-        initialisePositionsForButtons()
         val argument = arguments?.getString(KEY_ID)
         argument?.let { id ->
-            compositeDisposable.add(
-                repository.getProduct(id)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { it ->
-                        (activity as AppCompatActivity?)?.supportActionBar?.title = it.name
-                        name.text = it.name
-                        photo.loadUrl(it.imageUrl)
-                        @SuppressLint("SetTextI18n")
-                        info.text = "${it.info}"
-                        type.text = it.type.name
-                        price.text = it.price.toString()
-                    }
-            )
-            addToCart.setOnClickListener {
-                compositeDisposable.add(
-                    cart.add(id, 1)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe()
-                )
-            }
-            cart.getItem(id).observeOn(AndroidSchedulers.mainThread()).subscribe {
-                if (it.items.isNotEmpty()) {
-                    showCountControls()
-                    countLabel.text = "${it.items.size}"
-                } else {
-                    hideCountControls()
-                }
-            }
+            connectViews(id)
+            enableActions(id)
         }
 
     }
 
-    private fun initialisePositionsForButtons() {
-        countLabel.animate()
-            .scaleX(0f)
-            .scaleY(0f)
-            .setDuration(0)
-            .setListener(object : EmptyAnimatorListener() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    countLabel.visibility = View.VISIBLE
+    private fun enableActions(id: String) {
+        addToCart.setOnClickListener {
+            compositeDisposable.add(viewModel.addToCart(id, 1).subscribe())
+        }
+    }
+
+    private fun connectViews(id: String) {
+        viewModel.id = id
+        compositeDisposable.addAll(
+            viewModel.getName().subscribe {
+                name.text = it
+                (activity as AppCompatActivity?)?.supportActionBar?.title = it
+            },
+            viewModel.getInfo().subscribe { info.text = it },
+            viewModel.getType().subscribe { type.text = getString(R.string.label_category, it) },
+            viewModel.getPrice().subscribe { price.text = it },
+            viewModel.getPhoto().subscribe { photo.loadUrl(it) },
+            viewModel.getNumberOfProductInCart().subscribe {
+                if (it > 0) {
+                    countBadge.text = "$it"
+                    showBadge()
+                } else {
+                    hideBadge()
                 }
-            })
-            .start()
+            }
+        )
     }
 
-    private fun showCountControls() {
-        countLabel.animate()
-            .scaleX(1f)
-            .scaleY(1f)
+    private fun hideBadgeInstant() = animateBadge(0f, 0)
+        .setListener(object : EmptyAnimatorListener() {
+            override fun onAnimationEnd(animation: Animator?) {
+                countBadge.visibility = View.VISIBLE
+            }
+        })
+
+    private fun showBadge() = animateBadge(1f, 300).start()
+
+    private fun hideBadge() = animateBadge(0f, 300).start()
+
+    private fun animateBadge(scale: Float, duration: Long): ViewPropertyAnimator {
+        return countBadge.animate()
+            .scaleX(scale)
+            .scaleY(scale)
             .setInterpolator(DecelerateInterpolator())
-            .setDuration(300)
-            .start()
-    }
-
-    private fun hideCountControls() {
-        countLabel.animate()
-            .scaleX(0f)
-            .scaleY(0f)
-            .setDuration(300)
-            .start()
+            .setDuration(duration)
     }
 
     companion object {

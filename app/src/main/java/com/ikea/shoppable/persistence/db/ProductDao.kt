@@ -13,8 +13,8 @@ import io.reactivex.Single
 interface ProductDao {
 
     @Query("SELECT * FROM Products WHERE id = :id")
-    fun getById(id: String): Single<Product>
-    
+    fun getById(id: String): Observable<Product>
+
     @Query("SELECT * FROM Products WHERE name = :name")
     fun getByName(name: String): Single<Product>
 

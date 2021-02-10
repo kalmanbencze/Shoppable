@@ -3,7 +3,7 @@ package com.ikea.shoppable.view.cart
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
-class SwipeToDeleteCallback(val adapter: CartAdapter) : ItemTouchHelper.SimpleCallback(
+class SwipeToDeleteCallback(private val adapter: CartAdapter) : ItemTouchHelper.SimpleCallback(
     0,
     ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
 ) {

@@ -13,20 +13,24 @@
 
         <action
             android:id="@+id/action_open_product"
-            app:destination="@id/ProductFragment" />
+            app:destination="@id/ProductFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fade_out_fast"
+            app:popEnterAnim="@anim/fade_in_fast"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_open_cart"
-            app:destination="@id/CartFragment" />
+            app:destination="@id/CartFragment"
+            app:enterAnim="@anim/slide_in_top"
+            app:exitAnim="@anim/fade_out_fast"
+            app:popEnterAnim="@anim/fade_in_fast"
+            app:popExitAnim="@anim/slide_out_top" />
     </fragment>
     <fragment
         android:id="@+id/CartFragment"
         android:name="com.ikea.shoppable.view.cart.CartFragment"
         android:label="@string/cart_screen_title"
         tools:layout="@layout/fragment_cart">
-
-        <!--        <action-->
-        <!--            android:id="@+id/action_open_product"-->
-        <!--            app:destination="@id/ProductFragment" />-->
 
     </fragment>
     <fragment
@@ -36,7 +40,9 @@
         tools:layout="@layout/fragment_product">
         <action
             android:id="@+id/action_open_cart"
-            app:destination="@id/CartFragment" />
+            app:destination="@id/CartFragment"
+            app:enterAnim="@anim/slide_in_top"
+            app:exitAnim="@anim/fade_out_fast" />
 
     </fragment>
 </navigation>

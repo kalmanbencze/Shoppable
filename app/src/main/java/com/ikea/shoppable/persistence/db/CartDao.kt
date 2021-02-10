@@ -23,6 +23,9 @@ interface CartDao {
     @Query("DELETE FROM Cart WHERE id IN (SELECT id FROM Cart WHERE productId = :id LIMIT 1)")
     fun remove(id: String): Completable
 
+    @Query("DELETE FROM Cart WHERE productId = :id")
+    fun removeAll(id: String): Completable
+
     @Transaction
     @Query("SELECT * FROM Products")
     fun getAll(): Observable<List<CartItemProduct>>

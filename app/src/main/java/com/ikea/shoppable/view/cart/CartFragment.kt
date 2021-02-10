@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -19,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
+
 /**
  * a simple fragment holding the views for the list of products
  */
@@ -29,10 +31,10 @@ class CartFragment : DaggerFragment() {
     private lateinit var sendButton: Button
     private lateinit var clearButton: Button
     private val compositeDisposable = CompositeDisposable()
-    private lateinit var productList: RecyclerView
+    private lateinit var cartItemList: RecyclerView
 
     @Inject
-    lateinit var cart: CartRepository
+    lateinit var cartRepository: CartRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +46,7 @@ class CartFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        productList = view.findViewById(R.id.rv_cart_items)
+        cartItemList = view.findViewById(R.id.rv_cart_items)
         total = view.findViewById(R.id.tv_total)
         sendButton = view.findViewById(R.id.btn_checkout)
 
@@ -57,7 +59,7 @@ class CartFragment : DaggerFragment() {
 //        }
         sendButton.setOnClickListener {
             compositeDisposable.add(
-                cart.clear()
+                cartRepository.clear()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         Log.d(TAG, "onViewCreated: successfully cleared cart")
@@ -69,7 +71,7 @@ class CartFragment : DaggerFragment() {
             )
         }
         compositeDisposable.add(
-            cart.getTotal()
+            cartRepository.getTotal()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     total.text = getString(R.string.label_total, it.toString())
@@ -77,11 +79,11 @@ class CartFragment : DaggerFragment() {
 
                 })
         )
-        productList.layoutManager = LinearLayoutManager(context)
+        cartItemList.layoutManager = LinearLayoutManager(context)
         val adapter = CartAdapter(object : CartAdapter.OnRemoveClickListener {
-            override fun onItemClicked(item: CartItemProduct) {
+            override fun onDeletePressed(item: CartItemProduct) {
                 compositeDisposable.add(
-                    cart.remove(item.product.id)
+                    cartRepository.remove(item.product.id)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             Log.d(TAG, "onItemClicked: removed element from cart")
@@ -91,11 +93,27 @@ class CartFragment : DaggerFragment() {
                 )
             }
 
-        })
-        productList.adapter = adapter
+            override fun onItemSwiped(item: CartItemProduct) {
+                compositeDisposable.add(
+                    cartRepository.removeAll(item.product.id)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            Log.d(TAG, "onItemClicked: removed product from cart")
+                        }, {
+                            Log.e(TAG, "onItemClicked: ", it)
+                        })
+                )
+            }
 
-        compositeDisposable.add(cart.getItems().observeOn(AndroidSchedulers.mainThread()).subscribe({
-            adapter.items = it
+        })
+        cartItemList.adapter = adapter
+        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(adapter))
+        itemTouchHelper.attachToRecyclerView(cartItemList)
+
+        compositeDisposable.add(cartRepository.getItems().observeOn(AndroidSchedulers.mainThread()).subscribe({
+            val new = arrayListOf<CartItemProduct>()
+            new.addAll(it)
+            adapter.items = new
         }, {
             Log.e(TAG, "onViewCreated: ", it)
         }))

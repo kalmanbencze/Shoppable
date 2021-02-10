@@ -8,6 +8,7 @@ import io.reactivex.Observable
 interface CartRepository {
     fun add(productId: String, count: Int): Completable
     fun remove(productId: String): Completable
+    fun removeAll(productId: String): Completable
     fun clear(): Completable
     fun getItems(): Observable<List<CartItemProduct>>
     fun getSize(): Observable<Int>

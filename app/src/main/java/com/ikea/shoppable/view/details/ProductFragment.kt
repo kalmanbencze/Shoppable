@@ -32,8 +32,9 @@ class ProductFragment : DaggerFragment() {
     private var offset: Float = 0f
     private lateinit var countLabel: TextView
     private lateinit var addToCart: FloatingActionButton
-    private lateinit var increase: FloatingActionButton
-    private lateinit var decrease: FloatingActionButton
+
+    //    private lateinit var increase: FloatingActionButton
+//    private lateinit var decrease: FloatingActionButton
     private val TAG: String = javaClass.simpleName
     private val compositeDisposable = CompositeDisposable()
     private lateinit var name: TextView
@@ -63,8 +64,6 @@ class ProductFragment : DaggerFragment() {
         type = view.findViewById(R.id.tv_type)
         price = view.findViewById(R.id.tv_price)
         addToCart = view.findViewById(R.id.btn_add_to_cart)
-        increase = view.findViewById(R.id.btn_increase)
-        decrease = view.findViewById(R.id.btn_decrease)
         countLabel = view.findViewById(R.id.tv_count)
 
 
@@ -92,20 +91,6 @@ class ProductFragment : DaggerFragment() {
                         .subscribe()
                 )
             }
-            increase.setOnClickListener {
-                compositeDisposable.add(
-                    cart.add(id, 1)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe()
-                )
-            }
-            decrease.setOnClickListener {
-                compositeDisposable.add(
-                    cart.remove(id)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe()
-                )
-            }
             cart.getItem(id).observeOn(AndroidSchedulers.mainThread()).subscribe {
                 if (it.items.isNotEmpty()) {
                     showCountControls()
@@ -119,24 +104,6 @@ class ProductFragment : DaggerFragment() {
     }
 
     private fun initialisePositionsForButtons() {
-        decrease.animate()
-            .translationX(offset)
-            .setDuration(0)
-            .setListener(object : EmptyAnimatorListener() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    decrease.visibility = View.VISIBLE
-                }
-            })
-            .start()
-        increase.animate()
-            .translationX(offset)
-            .setDuration(0)
-            .setListener(object : EmptyAnimatorListener() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    increase.visibility = View.VISIBLE
-                }
-            })
-            .start()
         countLabel.animate()
             .scaleX(0f)
             .scaleY(0f)
@@ -150,20 +117,6 @@ class ProductFragment : DaggerFragment() {
     }
 
     private fun showCountControls() {
-        addToCart.animate()
-            .translationY(offset)
-            .setDuration(300)
-            .start()
-        increase.animate()
-            .translationX(0f)
-            .setInterpolator(DecelerateInterpolator())
-            .setDuration(300)
-            .start()
-        decrease.animate()
-            .translationX(0f)
-            .setInterpolator(DecelerateInterpolator())
-            .setDuration(300)
-            .start()
         countLabel.animate()
             .scaleX(1f)
             .scaleY(1f)
@@ -173,18 +126,6 @@ class ProductFragment : DaggerFragment() {
     }
 
     private fun hideCountControls() {
-        addToCart.animate()
-            .translationY(0f)
-            .setDuration(300)
-            .start()
-        increase.animate()
-            .translationX(offset)
-            .setDuration(300)
-            .start()
-        decrease.animate()
-            .translationX(offset)
-            .setDuration(300)
-            .start()
         countLabel.animate()
             .scaleX(0f)
             .scaleY(0f)

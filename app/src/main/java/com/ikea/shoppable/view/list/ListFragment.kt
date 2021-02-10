@@ -53,7 +53,7 @@ class ListFragment : DaggerFragment() {
         if (productList == null) {
             productList = view as RecyclerView
             productList!!.layoutManager = LinearLayoutManager(context)
-            val adapter = ProductsListAdapter(object : ProductsListAdapter.OnItemClickListener {
+            val adapter = ListAdapter(object : ListAdapter.OnItemClickListener {
                 override fun onItemClicked(item: Product) {
 
                     val args = Bundle()
@@ -61,7 +61,7 @@ class ListFragment : DaggerFragment() {
                     findNavController().navigate(R.id.action_open_product, args)
                 }
 
-            }, object : ProductsListAdapter.OnAddClickListener {
+            }, object : ListAdapter.OnAddClickListener {
                 override fun onAddClicked(item: Product) {
                     compositeDisposable.add(
                         cart.add(item.id, 1)

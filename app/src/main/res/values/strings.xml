@@ -13,6 +13,7 @@
     <string name="empty_string" />
     <string name="add_to_cart_description">Press button to add item to cart.</string>
     <string name="action_add_to_cart">add</string>
+    <string name="item_deleted_message">Item deleted.</string>
     <!-- Strings used for fragments for navigation -->
 
 </resources>

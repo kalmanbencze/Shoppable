@@ -15,11 +15,11 @@ import com.ikea.shoppable.view.common.loadUrlToCircle
 import java.util.*
 import kotlin.properties.Delegates
 
-class ProductsListAdapter(
+class ListAdapter(
     private val itemClickListener: OnItemClickListener,
     private val addClickListener: OnAddClickListener
 ) :
-    RecyclerView.Adapter<ProductsListAdapter.ProductViewHolder>(), AutoUpdatableAdapter {
+    RecyclerView.Adapter<ListAdapter.ProductViewHolder>(), AutoUpdatableAdapter {
 
     var items: List<Product> by Delegates.observable(emptyList()) { _, old, new ->
         autoNotify(old, new) { o, n -> o.id == n.id }

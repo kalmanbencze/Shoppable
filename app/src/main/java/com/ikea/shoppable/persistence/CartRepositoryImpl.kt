@@ -19,6 +19,11 @@ class CartRepositoryImpl(val cartDao: CartDao) : CartRepository {
             .subscribeOn(Schedulers.io())
     }
 
+    override fun removeAll(productId: String): Completable {
+        return cartDao.removeAll(productId)
+            .subscribeOn(Schedulers.io())
+    }
+
     override fun clear(): Completable {
         return cartDao.deleteAll()
             .subscribeOn(Schedulers.io())

@@ -71,7 +71,7 @@ class ProductFragment : DaggerFragment() {
 
     private fun enableActions(id: String) {
         addToCart.setOnClickListener {
-            compositeDisposable.add(viewModel.addToCart(id, 1).subscribe())
+            compositeDisposable.add(viewModel.addToCart(id).subscribe())
         }
     }
 

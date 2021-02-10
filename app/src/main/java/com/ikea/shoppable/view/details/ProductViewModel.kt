@@ -45,7 +45,7 @@ class ProductViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun addToCart(id: String, count: Int): Completable {
+    fun addToCart(id: String): Completable {
         return cartRepository.add(id, 1)
             .observeOn(AndroidSchedulers.mainThread())
     }

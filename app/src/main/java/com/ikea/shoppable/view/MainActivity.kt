@@ -17,6 +17,8 @@ import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity() {
 
+    private var cartItemCount: Int = 0
+    private var badgeText: TextView? = null
     private lateinit var navController: NavController
     private val TAG: String = javaClass.simpleName
     private val compositeDisposable = CompositeDisposable()
@@ -44,22 +46,38 @@ class MainActivity : DaggerAppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
-        val cartItem = menu.findItem(R.id.menu_action_cart)
-        cartItem.actionView.setOnClickListener { onOptionsItemSelected(cartItem) }
+        val cartMenuItem = menu.findItem(R.id.menu_action_cart)
+        badgeText = cartMenuItem.actionView.findViewById(R.id.tv_menu_action_cart_count)
+        //onCreateOptionsMenu is called after onStart/onResume so we miss out on the observable firing the first time, thus we set the last known value here
+        setBadgeText(cartItemCount)
+        cartMenuItem.actionView.setOnClickListener {
+            onOptionsItemSelected(cartMenuItem)
+        }
+        return true
+    }
+
+    private fun setBadgeText(count: Int) {
+        if (count > 0) {
+            badgeText?.visibility = View.VISIBLE
+            badgeText?.text = "$count"
+        } else {
+            badgeText?.visibility = View.GONE
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
         compositeDisposable.add(
             repository.getSize()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    val item = cartItem.actionView.findViewById<TextView>(R.id.tv_menu_action_cart_count)
-                    if (it > 0) {
-                        item.visibility = View.VISIBLE
-                        item.text = "$it"
+                .subscribe { value ->
+                    if (badgeText != null) {
+                        setBadgeText(value)
                     } else {
-                        item.visibility = View.GONE
+                        cartItemCount = value
                     }
                 }
         )
-        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

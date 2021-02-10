@@ -17,7 +17,7 @@ class RecyclerViewMatcher(private val recyclerViewId: Int) {
             var resources: Resources? = null
             var childView: View? = null
             override fun describeTo(description: Description) {
-                var idDescription = Integer.toString(recyclerViewId)
+                var idDescription = recyclerViewId.toString()
                 if (resources != null) {
                     idDescription = try {
                         resources!!.getResourceName(recyclerViewId)

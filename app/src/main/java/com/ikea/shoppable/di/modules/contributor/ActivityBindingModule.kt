@@ -1,5 +1,6 @@
-package com.ikea.shoppable.di.modules
+package com.ikea.shoppable.di.modules.contributor
 
+import com.ikea.shoppable.di.modules.viewmodel.ViewModelModule
 import com.ikea.shoppable.view.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

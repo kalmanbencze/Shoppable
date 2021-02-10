@@ -4,15 +4,9 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="primaryColor">#ffda1a</color>
-    <color name="primaryLightColor">#ffff5b</color>
     <color name="primaryDarkColor">#c7a900</color>
     <color name="secondaryColor">#0051ba</color>
-    <color name="secondaryLightColor">#587ced</color>
     <color name="secondaryDarkColor">#002a89</color>
-    <color name="primaryTextColor">#000000</color>
-    <color name="secondaryTextColor">#ffffff</color>
     <color name="price_green">#4caf50</color>
-    <color name="price_green_pressed">#43a047</color>
-    <color name="light_gray">#F2F2F2</color>
     <color name="gray">#AA000000</color>
 </resources>

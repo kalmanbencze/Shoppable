@@ -3,12 +3,14 @@ package com.ikea.shoppable.ui.robots
 import android.content.Context
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.ikea.shoppable.R
 import com.ikea.shoppable.espresso.RecycleViewAssertions.recyclerViewContainsAtLeast
 import com.ikea.shoppable.espresso.onSnackbar
+import com.ikea.shoppable.espresso.onSnackbarButton
 import com.ikea.shoppable.espresso.withRecyclerView
 import com.ikea.shoppable.model.CartItem
 import com.ikea.shoppable.persistence.db.CacheDatabase
@@ -18,11 +20,11 @@ import com.ikea.shoppable.persistence.db.CacheDatabase
  *
  * Note: Robot pattern
  */
-open class CartRobot(val context: Context) {
+open class CartRobot(private val context: Context) {
 
     fun checkCartIsVisible() {
         onView(withId(R.id.menu_action_cart))
-            .perform(ViewActions.click())
+            .perform(click())
         onView(withId(R.id.toolbar))
             .check(
                 matches(
@@ -47,7 +49,7 @@ open class CartRobot(val context: Context) {
 
     fun openCart() {
         onView(withId(R.id.menu_action_cart))
-            .perform(ViewActions.click())
+            .perform(click())
     }
 
     fun checkNumberOfItemsInList(expectedItemsCount: Int) {
@@ -78,7 +80,7 @@ open class CartRobot(val context: Context) {
 
     fun checkout() {
         onView(withId(R.id.btn_checkout))
-            .perform(ViewActions.click())
+            .perform(click())
     }
 
     fun checkSuccessMessageIsVisible() {
@@ -95,7 +97,7 @@ open class CartRobot(val context: Context) {
         onView(
             withRecyclerView(R.id.rv_cart_items)
                 .atPositionOnView(0, R.id.iv_remove_from_cart)
-        ).perform(ViewActions.click())
+        ).perform(click())
     }
 
     fun swipeLeftToDelete(index: Int) {
@@ -110,6 +112,16 @@ open class CartRobot(val context: Context) {
             withRecyclerView(R.id.rv_cart_items)
                 .atPosition(index)
         ).perform(ViewActions.swipeRight())
+    }
+
+    fun checkUndoMessageIsVisible() {
+        onSnackbarButton(R.string.action_undo)
+            .check(matches(isDisplayed()))
+    }
+
+    fun pressUndoAction() {
+        onSnackbarButton(R.string.action_undo)
+            .perform(click())
     }
 
 }

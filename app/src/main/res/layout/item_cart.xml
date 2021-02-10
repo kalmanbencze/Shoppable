@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:contentDescription="@string/action_remove_from_cart"
         android:src="@drawable/remove_circle_outline"
         android:textColor="@color/black"
         android:textSize="38sp"

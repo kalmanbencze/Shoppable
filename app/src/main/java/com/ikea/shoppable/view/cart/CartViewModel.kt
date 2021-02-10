@@ -3,25 +3,18 @@ package com.ikea.shoppable.view.cart
 import androidx.lifecycle.ViewModel
 import com.ikea.shoppable.model.CartItemProduct
 import com.ikea.shoppable.persistence.CartRepository
-import com.ikea.shoppable.persistence.ProductRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 class CartViewModel @Inject constructor(
-    private val cartRepository: CartRepository,
-    private val productRepository: ProductRepository
+    private val cartRepository: CartRepository
 ) : ViewModel() {
 
 
     fun getItems(): Observable<List<CartItemProduct>> {
         return cartRepository.getItems()
-            .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    fun addToCart(id: String, count: Int): Completable {
-        return cartRepository.add(id, 1)
             .observeOn(AndroidSchedulers.mainThread())
     }
 

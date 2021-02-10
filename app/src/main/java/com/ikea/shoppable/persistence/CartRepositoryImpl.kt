@@ -8,7 +8,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
-class CartRepositoryImpl(val cartDao: CartDao) : CartRepository {
+class CartRepositoryImpl(private val cartDao: CartDao) : CartRepository {
     override fun add(productId: String, count: Int): Completable {
         return cartDao.insert(CartItem(productId, count))
             .subscribeOn(Schedulers.io())

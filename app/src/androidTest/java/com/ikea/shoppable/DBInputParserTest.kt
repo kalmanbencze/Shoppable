@@ -20,7 +20,7 @@ class DBInputParserTest {
         val path = "products.json"
         val products = DBInputParser.readProducts(appContext, path)
         assert(products.size == 14)
-        assert(products.get(0).info.material == "wood with cover")
-        assert(products.get(5).info.numberOfSeats == 5)
+        assert(products[0].info.material == "wood with cover")
+        assert(products[5].info.numberOfSeats == 5)
     }
 }

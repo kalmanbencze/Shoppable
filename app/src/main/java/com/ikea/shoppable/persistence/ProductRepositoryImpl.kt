@@ -6,7 +6,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
-class ProductRepositoryImpl(val productDao: ProductDao) : ProductRepository {
+class ProductRepositoryImpl(private val productDao: ProductDao) : ProductRepository {
     override fun getProducts(): Observable<List<Product>> {
         return productDao.getAll()
             .subscribeOn(Schedulers.io())

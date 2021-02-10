@@ -85,9 +85,28 @@ class CartTest {
             checkNumberOfItemsInList(4)
             //we remove one item and check the remaining items count
             swipeLeftToDelete(1)
+            //we check the snackbar is visible and the item is removed
+            checkUndoMessageIsVisible()
             checkNumberOfItemsInList(3)
+
             swipeRightToDelete(1)
+            checkUndoMessageIsVisible()
             checkNumberOfItemsInList(2)
+        }
+    }
+
+    @Test
+    fun testDeleteUndoWorks() {
+        robot.apply {
+            openCart()
+            checkNumberOfItemsInList(4)
+            //we remove one item and check the remaining items count
+            swipeLeftToDelete(1)
+            checkUndoMessageIsVisible()
+            checkNumberOfItemsInList(3)
+            pressUndoAction()
+            Thread.sleep(500)
+            checkNumberOfItemsInList(4)
         }
     }
 }

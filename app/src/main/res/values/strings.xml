@@ -3,11 +3,9 @@
     <string name="action_reset">Cart</string>
     <string name="list_screen_title">Products</string>
     <string name="cart_screen_title">Cart</string>
-    <string name="product_screen_title">Product</string>
     <string name="label_add_successful">Product has been added to the cart!</string>
     <string name="action_undo">Undo</string>
     <string name="action_checkout">CHECKOUT</string>
-    <string name="action_clear">CLEAR</string>
     <string name="message_order_sent">Your order has been sent!</string>
     <string name="label_total">Total: %s</string>
     <string name="empty_string" />
@@ -15,6 +13,9 @@
     <string name="action_add_to_cart">add</string>
     <string name="item_deleted_message">Item deleted.</string>
     <string name="label_category">Category: %s</string>
+    <string name="photo_description">Photo of the product</string>
+    <string name="action_remove_from_cart">Remove from cart</string>
+    <string name="action_open_cart">Open cart</string>
     <!-- Strings used for fragments for navigation -->
 
 </resources>

@@ -18,17 +18,4 @@ object RecycleViewAssertions {
             }
         }
     }
-
-    fun recyclerViewContains(expectedItemsCount: Int): BoundedMatcher<View?, RecyclerView> {
-        return object : BoundedMatcher<View?, RecyclerView>(RecyclerView::class.java) {
-            override fun describeTo(description: Description) {
-                description.appendText("has exactly $expectedItemsCount items")
-            }
-
-            public override fun matchesSafely(recyclerView: RecyclerView): Boolean {
-                val adapter = recyclerView.adapter!!
-                return adapter.itemCount == expectedItemsCount
-            }
-        }
-    }
 }

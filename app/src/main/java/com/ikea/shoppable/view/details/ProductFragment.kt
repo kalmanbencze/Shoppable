@@ -57,7 +57,7 @@ class ProductFragment : DaggerFragment() {
         info = view.findViewById(R.id.tv_info)
         type = view.findViewById(R.id.tv_type)
         price = view.findViewById(R.id.tv_price)
-        addToCart = view.findViewById(R.id.btn_add_to_cart)
+        addToCart = view.findViewById(R.id.fab_add_to_cart)
         countBadge = view.findViewById(R.id.tv_count)
         hideBadgeInstant()
 

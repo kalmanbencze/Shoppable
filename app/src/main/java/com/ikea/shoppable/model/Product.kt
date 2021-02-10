@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+
 @Entity(tableName = "Products")
 class Product(
     @PrimaryKey
@@ -35,5 +36,9 @@ class Product(
 
     override fun equals(other: Any?): Boolean {
         return other is Product && other.id == id
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode() * name.hashCode() * price.hashCode() * type.hashCode()
     }
 }

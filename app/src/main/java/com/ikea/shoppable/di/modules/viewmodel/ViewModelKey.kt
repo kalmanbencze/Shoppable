@@ -1,4 +1,4 @@
-package com.ikea.shoppable.di.modules
+package com.ikea.shoppable.di.modules.viewmodel
 
 import androidx.lifecycle.ViewModel
 

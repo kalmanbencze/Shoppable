@@ -10,6 +10,7 @@
         android:id="@+id/iv_menu_action_cart"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:contentDescription="@string/action_open_cart"
         android:padding="8dp"
         android:src="@drawable/shopping_cart" />
 

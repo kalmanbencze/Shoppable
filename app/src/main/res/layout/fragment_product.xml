@@ -10,6 +10,7 @@
         android:id="@+id/iv_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/photo_description"
         android:minHeight="300dp"
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +82,7 @@
         tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btn_add_to_cart"
+        android:id="@+id/fab_add_to_cart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="36dp"

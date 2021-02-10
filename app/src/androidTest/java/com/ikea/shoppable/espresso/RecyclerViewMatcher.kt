@@ -51,3 +51,7 @@ class RecyclerViewMatcher(private val recyclerViewId: Int) {
         }
     }
 }
+
+fun withRecyclerView(recyclerViewId: Int): RecyclerViewMatcher {
+    return RecyclerViewMatcher(recyclerViewId)
+}

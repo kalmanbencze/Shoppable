@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.matcher.BoundedMatcher
 import org.hamcrest.Description
 
-object ExtraViewMatchers {
+object RecycleViewAssertions {
     fun recyclerViewContainsAtLeast(expectedItemsCount: Int): BoundedMatcher<View?, RecyclerView> {
         return object : BoundedMatcher<View?, RecyclerView>(RecyclerView::class.java) {
             override fun describeTo(description: Description) {
@@ -22,7 +22,7 @@ object ExtraViewMatchers {
     fun recyclerViewContains(expectedItemsCount: Int): BoundedMatcher<View?, RecyclerView> {
         return object : BoundedMatcher<View?, RecyclerView>(RecyclerView::class.java) {
             override fun describeTo(description: Description) {
-                description.appendText("has at least $expectedItemsCount items")
+                description.appendText("has exactly $expectedItemsCount items")
             }
 
             public override fun matchesSafely(recyclerView: RecyclerView): Boolean {

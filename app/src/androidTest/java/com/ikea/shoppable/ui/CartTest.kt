@@ -1,18 +1,10 @@
 package com.ikea.shoppable.ui
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ikea.shoppable.R
-import com.ikea.shoppable.espresso.ExtraViewMatchers.recyclerViewContains
-import com.ikea.shoppable.espresso.ExtraViewMatchers.recyclerViewContainsAtLeast
-import com.ikea.shoppable.model.CartItem
-import com.ikea.shoppable.persistence.db.CacheDatabase
+import com.ikea.shoppable.ui.robots.CartRobot
 import com.ikea.shoppable.view.MainActivity
 import org.junit.Before
 import org.junit.Rule
@@ -23,73 +15,66 @@ import org.junit.runner.RunWith
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class CartTest {
+    private lateinit var robot: CartRobot
+
     @Rule
     @JvmField
     var activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Before
     fun before() {
-        CacheDatabase.insertData(InstrumentationRegistry.getInstrumentation().targetContext)
-        val db = CacheDatabase.getInstance(InstrumentationRegistry.getInstrumentation().targetContext)
-        val items = arrayListOf<CartItem>()
-        items.add(CartItem("1", 1))
-        items.add(CartItem("2", 1))
-        items.add(CartItem("3", 2))
-        items.add(CartItem("4", 4))
-        db.cartDao().insert(items).blockingAwait()
+        robot = CartRobot(InstrumentationRegistry.getInstrumentation().targetContext)
+        robot.insertItems(4)
     }
 
     @Test
     fun testUIAppears() {
-        Thread.sleep(500)
-        onView(withId(R.id.menu_action_cart))
-            .perform(click())
-        onView(withText(R.string.cart_screen_title))
-            .check(matches(isDisplayed()))
-        onView(withId(R.id.rv_cart_items))
-            .check(matches(isDisplayed()))
+        robot.checkCartIsVisible()
     }
 
     @Test
     fun test4ElementsAdded() {
-        onView(withId(R.id.menu_action_cart))
-            .perform(click())
+        robot.openCart()
+
         //we check the number of elements
-        onView(withId(R.id.rv_cart_items))
-            .check(
-                matches(
-                    recyclerViewContainsAtLeast(4)
-                )
-            )
+        robot.checkNumberOfItemsInCart(4)
+
         //we check the total amount after the 8 items have been added
-        onView(withId(R.id.tv_total)).check(
-            matches(
-                withText(
-                    InstrumentationRegistry.getInstrumentation().targetContext.getString(
-                        R.string.label_total,
-                        "38,304 kr"
-                    )
-                )
-            )
-        )
+        robot.checkTotalAmountIs("12,424 kr")
+
         //we check the badge on the cart menu action
-        onView(withId(R.id.tv_menu_action_cart_count)).check(matches(withText("8")))
+        robot.checkCartIconBadgeText("4")
     }
 
     @Test
     fun testOrderCanBeSent() {
-        onView(withId(R.id.menu_action_cart))
-            .perform(click())
-        onView(withId(R.id.btn_checkout))
-            .perform(click())
-        onView(withId(com.google.android.material.R.id.snackbar_text))
-            .check(matches(withText(R.string.message_order_sent)))
+        robot.apply {
+            openCart()
+            checkout()
+            checkSuccessMessageIsVisible()
 
-        onView(withId(R.id.rv_cart_items))
-            .check(
-                matches(
-                    recyclerViewContains(0)
-                )
-            )
+            //we are back on the product list after the order has been sent
+            checkCartIsClosed()
+
+            //we check the total amount in the cart is 0 and the cart is empty
+            openCart()
+            checkNumberOfItemsInCart(0)
+            checkTotalAmountIs("0 kr")
+        }
+    }
+
+    @Test
+    fun testItemCanBeRemoved() {
+        robot.apply {
+            openCart()
+            checkNumberOfItemsInCart(4)
+            //we remove one item and check the remaining items count
+            removeFirstItemFromCart()
+            checkNumberOfItemsInCart(3)
+            //we remove 2 more and check the number of items
+            removeFirstItemFromCart()
+            removeFirstItemFromCart()
+            checkNumberOfItemsInCart(1)
+        }
     }
 }

@@ -31,11 +31,11 @@ project.afterEvaluate {
     }.each { variant ->
         def variantName = variant.name
         def unitTestTask = "test${variantName.capitalize()}UnitTest"
-        def uiTestCoverageTask = "create${variantName.capitalize()}CoverageReport"
+//        def uiTestCoverageTask = "create${variantName.capitalize()}CoverageReport"
 
         tasks.create(name: "${unitTestTask}Coverage", type: JacocoReport, dependsOn: [
-                "$unitTestTask",
-                "$uiTestCoverageTask"
+                "$unitTestTask"//,
+//                "$uiTestCoverageTask"
         ]) {
             group = "Reporting"
             description = "Generate Jacoco coverage reports for the ${variantName.capitalize()} build"

@@ -1,7 +1,7 @@
 name: Workflow for Codecov Action
 on: [push, pull_request]
 jobs:
-  no-deps:
+  coverage:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -9,43 +9,5 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Upload coverage to Codecov (script)
-        uses: ./
-        with:
-          files: ./coverage/script/coverage-final.json
-          flags: script,${{ matrix.os }}
-          name: codecov-script
-      - name: Upload coverage to Codecov
-        uses: ./
-        with:
-          files: ./coverage/calculator/coverage-final.json,./coverage/coverage-test/coverage-final.json
-          file: ./coverage/coverage-final.json
-          flags: ${{ matrix.os }}
-          name: codecov
-  run:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-latest]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install dependencies
-        run: npm install
-      - name: Lint
-        run: npm run lint
-      - name: Run tests and collect coverage
-        run: npm run test
-      - name: Upload coverage to Codecov (script)
-        uses: ./
-        with:
-          files: ./coverage/script/coverage-final.json
-          flags: script,${{ matrix.os }}
-          name: codecov-script
-      - name: Upload coverage to Codecov
-        uses: ./
-        with:
-          files: ./coverage/calculator/coverage-final.json,./coverage/coverage-test/coverage-final.json
-          file: ./coverage/coverage-final.json
-          flags: ${{ matrix.os }}
-          name: codecov
+      - name: Codecov
+        uses: codecov/codecov-action@v2.0.3

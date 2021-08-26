@@ -49,7 +49,7 @@ jobs:
         uses: codecov/codecov-action@v2.0.3
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-          files: ./app/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml, ./app/build/jacoco/testDebugUnitTest.exec # optional
+          files: ./app/build/reports/coverage/debug/report.xml, ./app/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml, ./app/build/jacoco/testDebugUnitTest.exec # optional
           flags: unittests # optional
           name: codecov-umbrella # optional
           fail_ci_if_error: false # optional (default = false)

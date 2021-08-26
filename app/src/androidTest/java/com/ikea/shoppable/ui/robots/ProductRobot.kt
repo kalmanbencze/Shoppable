@@ -13,7 +13,7 @@ import com.ikea.shoppable.espresso.withRecyclerView
 import com.ikea.shoppable.model.Product
 import com.ikea.shoppable.persistence.db.CacheDatabase
 
-class ProductRobot(val context: Context) {
+class ProductRobot(private val context: Context) {
 
     fun clearCart() {
         val db = CacheDatabase.getInstance(context)
@@ -31,7 +31,7 @@ class ProductRobot(val context: Context) {
             )
         onView(withId(R.id.tv_name)).check(matches(withText(name)))
         onView(withId(R.id.tv_info)).check(matches(withText(info)))
-        onView(withId(R.id.tv_type)).check(matches(withText("Category: ${type.name.toLowerCase()}")))
+        onView(withId(R.id.tv_type)).check(matches(withText("Category: ${type.name.lowercase()}")))
         onView(withId(R.id.tv_price)).check(matches(withText(price)))
     }
 

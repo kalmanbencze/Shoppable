@@ -48,6 +48,7 @@ project.afterEvaluate {
             }
 
             def fileFilter = [
+                    '**/build/*.class',
                     '**/R.class',
                     '**/R$*.class',
                     '**/BuildConfig.*',

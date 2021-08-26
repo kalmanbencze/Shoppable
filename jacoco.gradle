@@ -49,6 +49,7 @@ project.afterEvaluate {
 
             def fileFilter = [
                     '**/build/*.class',
+                    '**/build/generated/*.class',
                     '**/R.class',
                     '**/R$*.class',
                     '**/BuildConfig.*',
@@ -86,7 +87,7 @@ project.afterEvaluate {
             ]
 
             classDirectories.setFrom(files([
-                    fileTree(dir: "${buildDir}/tmp/kotlin-classes/${variantName}", excludes: fileFilter) + fileTree(dir: "${buildDir}/intermediates/javac/debug/classes", excludes: fileFilter)
+                    fileTree(dir: "${buildDir}/tmp/kotlin-classes/${variantName}", excludes: fileFilter)
             ]))
 
             def coverageSourceDirs = [

@@ -87,7 +87,7 @@ project.afterEvaluate {
             ]
 
             classDirectories.setFrom(files([
-                    fileTree(dir: "${buildDir}/tmp/kotlin-classes/${variantName}", excludes: fileFilter)
+                    fileTree(dir: "${buildDir}/tmp/kotlin-classes/${variantName}", exclude: fileFilter)
             ]))
 
             def coverageSourceDirs = [
